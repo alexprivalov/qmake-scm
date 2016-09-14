@@ -27,6 +27,18 @@ Fortunately there is a way to get some version information. Though it requires a
 
 In general the name and the path of the versions file is not important. But content is. If you decided to use other file name or place it in some other location use variable `VCSQT_EXPORTED_VERSION_FILE`. This variable defaults to `$$PWD/version.txt`.
 
+To simplify initial project setup this project includes shell script `git_setup.sh` that copies `version.in`, `version.txt` and setups git attributes:
+
+```bash
+#!/bin/bash
+
+BASEPATH=$(dirname $0)
+cp -n $BASEPATH/git_version.txt version.txt
+cp -n $BASEPATH/version.in version.in
+echo "version.txt export-subst" >> .gitattributes
+echo "Don't forget to commit changes"
+```
+
 ## How it works
 
 Project include file defines "custom compiler" with name `vcsqt`. Compiler accepts input via variable VCSQT_HEADERS. For each file listed in this variable it creates file with the same name and extension `.h`, so `version.in` becomes `version.h`. This file generated in the build directory. File only updated if new file differs from the previous to avoid triggering rebuild of files that include it.
