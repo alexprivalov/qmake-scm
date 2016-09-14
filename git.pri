@@ -6,8 +6,8 @@ VCSQT_BRANCH=$$system(git -C $$_PRO_FILE_PWD_ rev-parse --abbrev-ref HEAD)
 isEmpty(VCSQT_BRANCH) {
     # try to read version.txt file that should have been updated during export operation
     # sample data: HEAD -> master, tag: v0.0.3, 3e575e9
-    isEmpty(VCSQT_EXPORT_VERSION): VCSQT_ARCHIVE_VERSION=$$PWD/version.txt
-    VCSQT_VERSION_INFO=$$cat($$VCSQT_ARCHIVE_VERSION)
+    isEmpty(VCSQT_EXPORTED_VERSION_FILE): VCSQT_EXPORTED_VERSION_FILE=$$PWD/version.txt
+    VCSQT_VERSION_INFO=$$cat($$VCSQT_EXPORTED_VERSION_FILE)
     isEqual(VCSQT_VERSION_INFO, "$Format:%D, %h$") {
         warning("No version information available: building from unexported version")
         VCSQT_DISTANCE=0
