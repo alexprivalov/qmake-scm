@@ -1,4 +1,6 @@
-VCSQT_DESCRIBE=$$system(git -C $$_PRO_FILE_PWD_ describe --long --tags --dirty=+)
+isEmpty(VCSQT_VERSION_PREFIX):VCSQT_VERSION_PREFIX=v
+
+VCSQT_DESCRIBE=$$system(git -C $$_PRO_FILE_PWD_ describe --long --tags --dirty=+ --match="$$VCSQT_VERSION_PREFIX*")
 # sample data: v0.4.0-5-ga8152a7
 VCSQT_BRANCH=$$system(git -C $$_PRO_FILE_PWD_ rev-parse --abbrev-ref HEAD)
 
@@ -23,7 +25,7 @@ isEmpty(VCSQT_BRANCH) {
         VCSQT_DISTANCE=0
         isEqual(VCSQT_VERSION_INFO_COMPONENT_3, "tag:") {
             VCSQT_VERSION=$$member(VCSQT_VERSION_INFO, 4)
-            VCSQT_VERSION=$$replace(VCSQT_VERSION, v, )
+            VCSQT_VERSION=$$replace(VCSQT_VERSION, $$VCSQT_VERSION_PREFIX, )
         }else {
             # no version information
             warning("No version information available (no tags)")
@@ -36,7 +38,7 @@ isEmpty(VCSQT_BRANCH) {
         VCSQT_DESCRIBE=$$split(VCSQT_DESCRIBE, "-")
 
         VCSQT_VERSION=$$member(VCSQT_DESCRIBE, 0)
-        VCSQT_VERSION=$$replace(VCSQT_VERSION, v, )
+        VCSQT_VERSION=$$replace(VCSQT_VERSION, $$VCSQT_VERSION_PREFIX, )
         VCSQT_DISTANCE=$$member(VCSQT_DESCRIBE, 1)
         VCSQT_HASH=$$member(VCSQT_DESCRIBE, 2)
         VCSQT_HASH=$$section(VCSQT_HASH,,2)
@@ -61,9 +63,9 @@ vcsqt.input = VCSQT_HEADERS
 vcsqt.commands += sed
 vcsqt.commands += -e \"s/\\\$${VCSQT_VERSION}/$${VCSQT_VERSION}/\"
 vcsqt.commands += -e \"s/\\\$${VCSQT_HASH}/$${VCSQT_HASH}/\"
-vcsqt.commands += -e \"s/\\\$${VCSQT_BRANCH}/$${VCSQT_BRANCH}/\"
+vcsqt.commands += -e \"s/\\\$${VCSQT_BRANCH}/$$replace(VCSQT_BRANCH, "/", "\\/")/\"
 vcsqt.commands += -e \"s/\\\$${VCSQT_DISTANCE}/$${VCSQT_DISTANCE}/\"
-vcsqt.commands += -e \"s/\\\$${VCSQT_PRETTY_VERSION}/$${VCSQT_PRETTY_VERSION}/\"
+vcsqt.commands += -e \"s/\\\$${VCSQT_PRETTY_VERSION}/$$replace(VCSQT_PRETTY_VERSION, "/", "\\/")/\"
 vcsqt.commands += ${QMAKE_FILE_IN} > ${QMAKE_FILE_OUT}.tmp;
 vcsqt.commands += if cmp ${QMAKE_FILE_OUT}.tmp ${QMAKE_FILE_OUT} >/dev/null 2>&1; then rm ${QMAKE_FILE_OUT}.tmp; else mv ${QMAKE_FILE_OUT}.tmp ${QMAKE_FILE_OUT}; fi
 vcsqt.output = ${QMAKE_FILE_IN_BASE}.h
