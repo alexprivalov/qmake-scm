@@ -60,7 +60,7 @@ VERSION = $$VCSQT_VERSION
 
 vcsqt.name = Generate version headers
 vcsqt.input = VCSQT_HEADERS
-vcsqt.commands += $$(QMAKE_STREAM_EDITOR)
+vcsqt.commands += $${QMAKE_STREAM_EDITOR}
 vcsqt.commands += -e \"s/\\\$${VCSQT_VERSION}/$${VCSQT_VERSION}/\"
 vcsqt.commands += -e \"s/\\\$${VCSQT_HASH}/$${VCSQT_HASH}/\"
 vcsqt.commands += -e \"s/\\\$${VCSQT_BRANCH}/$$replace(VCSQT_BRANCH, "/", "\\/")/\"
