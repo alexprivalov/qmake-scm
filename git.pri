@@ -35,8 +35,9 @@ isEmpty(VCSQT_BRANCH) {
 }else {
     # detached head state
     isEqual(VCSQT_BRANCH, "HEAD") {
-        VCSQT_BRANCH=$$system(git -C $$_PRO_FILE_PWD_ show -s --pretty=%D HEAD)
+        VCSQT_BRANCH=$$system(git -C $$_PRO_FILE_PWD_ show -s --pretty=%d HEAD)
         VCSQT_BRANCH=$$last(VCSQT_BRANCH)
+        VCSQT_BRANCH=$$replace(VCSQT_BRANCH,"\\)",)
     }
     # has at least 1 tag
     !isEmpty(VCSQT_DESCRIBE) {
