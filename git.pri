@@ -41,10 +41,10 @@ isEmpty(VCSQT_BRANCH) {
     }
     # has at least 1 tag
     !isEmpty(VCSQT_DESCRIBE) {
+        VCSQT_DESCRIBE=$$replace(VCSQT_DESCRIBE, $$VCSQT_VERSION_PREFIX, )
         VCSQT_DESCRIBE=$$split(VCSQT_DESCRIBE, "-")
 
         VCSQT_VERSION=$$member(VCSQT_DESCRIBE, 0)
-        VCSQT_VERSION=$$replace(VCSQT_VERSION, $$VCSQT_VERSION_PREFIX, )
         VCSQT_DISTANCE=$$member(VCSQT_DESCRIBE, 1)
         VCSQT_HASH=$$member(VCSQT_DESCRIBE, 2)
         VCSQT_HASH=$$section(VCSQT_HASH,,2)
