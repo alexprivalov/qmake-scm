@@ -35,8 +35,36 @@ isEmpty(VCSQT_BRANCH) {
 }else {
     # detached head state
     isEqual(VCSQT_BRANCH, "HEAD") {
-        VCSQT_BRANCH=$$system(git -C $$_PRO_FILE_PWD_ show -s --pretty=%d HEAD)
-        VCSQT_BRANCH=$$last(VCSQT_BRANCH)
+        VCSQT_REFS=$$system(git -C $$_PRO_FILE_PWD_ show -s --pretty=%d HEAD)
+        VCSQT_ORIGIN=$$system(git -C $$_PRO_FILE_PWD_ remote)
+
+        # strip start and end parentheses
+        VCSQT_REFS=$$str_member($$VCSQT_REFS, 1, -2)
+
+        # make a list of separate refs
+        VCSQT_COMMA=,
+        VCSQT_REFS=$$split(VCSQT_REFS, $$VCSQT_COMMA)
+
+        for(VCSQT_REF, VCSQT_REFS) {
+            VCSQT_REF=$$replace(VCSQT_REF," ",)
+            VCSQT_REF4=$$str_member($$VCSQT_REF, 0, 3)
+
+            # skip tags
+            !isEqual(VCSQT_REF4, "tag:") {
+                # strip remotes
+                VCSQT_REF_PARTS=$$split(VCSQT_REF,"/")
+                VCSQT_REF_PARTS-=$$VCSQT_ORIGIN
+                VCSQT_REF=$$join(VCSQT_REF_PARTS,/)
+
+                # skip head
+                !isEqual(VCSQT_REF, "HEAD") {
+                    VCSQT_SELECTED_REFS += $$VCSQT_REF
+                }
+            }
+        }
+        # if failed, treat as master
+        isEmpty(VCSQT_SELECTED_REFS): VCSQT_BRANCH=master
+        else: VCSQT_BRANCH=$$last(VCSQT_SELECTED_REFS)
         VCSQT_BRANCH=$$replace(VCSQT_BRANCH,"\\)",)
     }
     # has at least 1 tag
