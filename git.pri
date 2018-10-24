@@ -64,7 +64,7 @@ isEmpty(VCSQT_BRANCH) {
         }
         # if failed, treat as master
         isEmpty(VCSQT_SELECTED_REFS): VCSQT_BRANCH=master
-        else: VCSQT_BRANCH=$$last(VCSQT_SELECTED_REFS)
+        else: VCSQT_BRANCH=$$first(VCSQT_SELECTED_REFS)
         VCSQT_BRANCH=$$replace(VCSQT_BRANCH,"\\)",)
     }
     # has at least 1 tag
