@@ -97,9 +97,9 @@ vcsqt.input = VCSQT_HEADERS
 vcsqt.commands += $${QMAKE_STREAM_EDITOR}
 vcsqt.commands += -e \"s%\\\$${VCSQT_VERSION}%$${VCSQT_VERSION}%g\"
 vcsqt.commands += -e \"s%\\\$${VCSQT_HASH}%$${VCSQT_HASH}%g\"
-vcsqt.commands += -e \"s%\\\$${VCSQT_BRANCH}%$$replace(VCSQT_BRANCH, "/", "\\/")%g\"
+vcsqt.commands += -e \"s%\\\$${VCSQT_BRANCH}%$${VCSQT_BRANCH}%g\"
 vcsqt.commands += -e \"s%\\\$${VCSQT_DISTANCE}%$${VCSQT_DISTANCE}%g\"
-vcsqt.commands += -e \"s%\\\$${VCSQT_PRETTY_VERSION}%$$replace(VCSQT_PRETTY_VERSION, "/", "\\/")%g\"
+vcsqt.commands += -e \"s%\\\$${VCSQT_PRETTY_VERSION}%$${VCSQT_PRETTY_VERSION}%g\"
 unix {
     vcsqt.commands += ${QMAKE_FILE_IN} > ${QMAKE_FILE_OUT}.tmp;
     vcsqt.commands += if cmp ${QMAKE_FILE_OUT}.tmp ${QMAKE_FILE_OUT} >/dev/null 2>&1; then rm ${QMAKE_FILE_OUT}.tmp; else mv ${QMAKE_FILE_OUT}.tmp ${QMAKE_FILE_OUT}; fi
