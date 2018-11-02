@@ -62,8 +62,8 @@ isEmpty(VCSQT_BRANCH) {
                 }
             }
         }
-        # if failed, treat as master
-        isEmpty(VCSQT_SELECTED_REFS): VCSQT_BRANCH=master
+        # if failed or contains master treat as master
+        isEmpty(VCSQT_SELECTED_REFS) | contains(VCSQT_SELECTED_REFS, master): VCSQT_BRANCH=master
         else: VCSQT_BRANCH=$$first(VCSQT_SELECTED_REFS)
         VCSQT_BRANCH=$$replace(VCSQT_BRANCH,"\\)",)
     }
