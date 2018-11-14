@@ -61,36 +61,36 @@ Windows platforms always update output file (MRs are welcome).
 
 Version header file generated using template substitution. Following pattern are defined:
 
-* `${QSCM_VERSION}`  
+* `@{QSCM_VERSION}`  
   Version string in the form `1.2.3` without prefix.  
   Also includes all other parts like pre-release identifiers and build numbers if they exist in the tag: `1.2.3-rc.1+build`.
 
-* `${QSCM_SEMVER}`  
+* `@{QSCM_SEMVER}`  
   Version string containing only major, minor and patch numbers, for example `1.2.3`.
 
-* `${QSCM_SEMVER_SUFFIX}`  
+* `@{QSCM_SEMVER_SUFFIX}`  
   The rest of the version string.  
-  `${QSCM_VERSION}` = `${QSCM_SEMVER}` + `${QSCM_SEMVER_SUFFIX}` (`+` is concatenation).
+  `@{QSCM_VERSION}` = `@{QSCM_SEMVER}` + `@{QSCM_SEMVER_SUFFIX}` (`+` is concatenation).
 
-* `${QSCM_SEMVER_MAJ}`  
+* `@{QSCM_SEMVER_MAJ}`  
   Major version number (integer).
 
-* `${QSCM_SEMVER_MIN}`  
+* `@{QSCM_SEMVER_MIN}`  
   Minor version number (integer).
 
-* `${QSCM_SEMVER_PAT}`  
+* `@{QSCM_SEMVER_PAT}`  
   Patch version number (integer).
 
-* `${QSCM_HASH}`  
+* `@{QSCM_HASH}`  
   Commit id of the current commit. May include "+" as a sign of a dirty repository state (modified files).
 
-* `${QSCM_DISTANCE}`  
+* `@{QSCM_DISTANCE}`  
   Distance from the latest tag. Number greater or equal to zero.
 
-* `${QSCM_BRANCH}`  
+* `@{QSCM_BRANCH}`  
   Current branch name
 
-* `${QSCM_PRETTY_VERSION}`  
+* `@{QSCM_PRETTY_VERSION}`  
   Version string that includes up to several components depending on their values:
 
     - *v&lt;version&gt; &lt;hash&gt;*: `v0.0.1 b232a77`.  
@@ -109,16 +109,16 @@ Version header file generated using template substitution. Following pattern are
 **Before substitution:**
 
 ```cpp
-#define VERSION "${QSCM_VERSION}"
-#define QSCM_SEMVER "${QSCM_SEMVER}"
-#define QSCM_SEMVER_MAJ ${QSCM_SEMVER_MAJ}
-#define QSCM_SEMVER_MIN ${QSCM_SEMVER_MIN}
-#define QSCM_SEMVER_PAT ${QSCM_SEMVER_PAT}
-#define QSCM_SEMVER_SUFFIX "${QSCM_SEMVER_SUFFIX}"
-#define QSCM_HASH "${QSCM_HASH}"
-#define QSCM_DISTANCE ${QSCM_DISTANCE}
-#define QSCM_BRANCH "${QSCM_BRANCH}"
-#define QSCM_PRETTY_VERSION "${QSCM_PRETTY_VERSION}"
+#define VERSION "@{QSCM_VERSION}"
+#define QSCM_SEMVER "@{QSCM_SEMVER}"
+#define QSCM_SEMVER_MAJ @{QSCM_SEMVER_MAJ}
+#define QSCM_SEMVER_MIN @{QSCM_SEMVER_MIN}
+#define QSCM_SEMVER_PAT @{QSCM_SEMVER_PAT}
+#define QSCM_SEMVER_SUFFIX "@{QSCM_SEMVER_SUFFIX}"
+#define QSCM_HASH "@{QSCM_HASH}"
+#define QSCM_DISTANCE @{QSCM_DISTANCE}
+#define QSCM_BRANCH "@{QSCM_BRANCH}"
+#define QSCM_PRETTY_VERSION "@{QSCM_PRETTY_VERSION}"
 ```
 
 **After substitution (sample):**
