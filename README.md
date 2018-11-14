@@ -1,31 +1,42 @@
-# Version support for Qt projects
+# Version support for QMake projects
 
-This project adds ability to automatically get version information from VCS (currently git only) and use it in Qt projects.
+This project adds ability to automatically get version information from SCM (currently git only) and use it in QMake projects.
+
+Tags should follow [Semantic Versioning](https://semver.org/) with optional [prefix](#configuring-qmake-scm).
 
 ## How to use
 
-1. Add `vcsqt` submodule to your project
+1. Add `qmake-scm` submodule to your project
 2. Copy default header template `version.in` to you project (and add to version control). Or create your own header template using [substitutions](#markdown-header-substitutions).
-3. Include `git.pri` in your Qt project file `include(vcsqt/git.pri)` (path depends on your project's structure).
-4. Add header templates that should be processed to `VCSQT_HEADERS` variable: `VCSQT_HEADERS=$$PWD/version.in` (path depends on the header template file location).
-5. Include `version.h` to you sources and use defines. Additionally `git.pri` also defines variable `VERSION` that influences version of shared library projects.
-6. Use tags in the form `v1.2.3` to specify version of your project.
+3. Include `git.pri` in your QMake project file:  
+   `include(qmake-scm/git.pri)` (path depends on the project structure).
+4. Add header templates that should be processed to `QSCM_HEADERS` variable:  
+   `QSCM_HEADERS += $$PWD/version.in` (path depends on the header template file location).
+5. Include `version.h` to you sources and use defines.  
+   Additionally `git.pri` also defines variables `VERSION`, `VER_MAJ`, `VER_MIN`, `VER_PAT` that influence version of shared library and application projects.
+6. Use tags in the form `v1.2.3` to specify version of your project (version prefix is [configurable](#configuring-qmake-scm)).
 
 ### [Optional] Make version control work with exported repository
 
-When building from cloned repository `vcsqt` obtain version information directly from VCS (git). But when repository was exported (for example downloaded from Bitbucket) this source of information doesn't work anymore.
+When building from cloned repository `qmake-scm` obtains version information directly from SCM (git). But when repository was exported this source of information doesn't work anymore.
 
 Fortunately there is a way to get some version information. Though it requires additional setup:
 
-1. Add file `version.txt` to the root of your project with following content:
+1. Add file `version.txt` to the root of your project with the following content:
+    
+    ```
+    $Format:%D, %h$
+    ```
 
-        $Format:%D, %h$
+2. Add `export-subst` attribute for this file:
 
-2. Add `export-subst` attribute for this file (don't forget to commit):
+    ```bash
+    echo "version.txt export-subst" >> .gitattributes
+    ```
 
-        echo "version.txt export-subst" >> .gitattributes
+    Changes must be commited to have an effect.
 
-In general the name and the path of the versions file is not important. But content is. If you decided to use other file name or place it in some other location use variable `VCSQT_EXPORTED_VERSION_FILE`. This variable defaults to `$$PWD/version.txt`.
+In general the name and the path of the versions file is not important. But content is. It is possible to change file path and name using  `QSCM_EXPORTED_VERSION_FILE` variable (defaults to `$$PWD/version.txt`).
 
 To simplify initial project setup this project includes shell script `git_setup.sh` that copies `version.in`, `version.txt` and setups git attributes:
 
@@ -41,56 +52,124 @@ echo "Don't forget to commit changes"
 
 ## How it works
 
-Project include file defines "custom compiler" with name `vcsqt`. Compiler accepts input via variable VCSQT_HEADERS. For each file listed in this variable it creates file with the same name and extension `.h`, so `version.in` becomes `version.h`. This file generated in the build directory. File only updated if new file differs from the previous to avoid triggering rebuild of files that include it.
+Project include file (`.pri`) defines "custom compiler" with name `qscm`. Compiler accepts input via variable `QSCM_HEADERS`. For each file listed in this variable it creates file with the same name and extension `.h`, so `version.in` becomes `version.h`. This file generated in the build directory. 
 
-Custom compiler uses version information fetched during qmake step. So in order to update version one should explicitly run qmake step after updating version in the repository.
-
-Also it is trivial to make Qt Creator perform this step on every build (at the cost of a bit slower build). Specify following "Make arguments" in project setup page `qmake_all all`. This will run qmake step following build step on every build.
+On unix platforms the output file is only updated if it is different to avoid triggering rebuild of files that include it.  
+Windows platforms always update output file (MRs are welcome).
 
 ### Substitutions
 
 Version header file generated using template substitution. Following pattern are defined:
 
-`${VCSQT_VERSION}`
-:   Version string in the form `1.2.3` (without leading "v").
+* `${QSCM_VERSION}`  
+  Version string in the form `1.2.3` without prefix.  
+  Also includes all other parts like pre-release identifiers and build numbers if they exist in the tag: `1.2.3-rc.1+build`.
 
-`${VCSQT_HASH}`
-:   Commit id of current commit. May include "+" as a sign of a dirty repository state (modified files).
+* `${QSCM_SEMVER}`  
+  Version string containing only major, minor and patch numbers, for example `1.2.3`.
 
-`${VCSQT_DISTANCE}`
-:   Distance from the latest tag. Number greater or equal to zero.
+* `${QSCM_SEMVER_SUFFIX}`  
+  The rest of the version string.  
+  `${QSCM_VERSION}` = `${QSCM_SEMVER}` + `${QSCM_SEMVER_SUFFIX}` (`+` is concatenation).
 
-`${VCSQT_BRANCH}`
-:   Current branch name
+* `${QSCM_SEMVER_MAJ}`  
+  Major version number (integer).
 
-`${VCSQT_PRETTY_VERSION}`
-:   Version string that includes up to several components depending on their values.
+* `${QSCM_SEMVER_MIN}`  
+  Minor version number (integer).
 
-    * _v<version> <hash>_: `v0.0.1 b232a77`. Built from repository in clean state (no modified files) at tag `v0.0.1` and commit id `b232a77`.
-    * _v<version> <hash>+_: `v0.0.1 b232a77+`. Built from repository in dirty state (modified files) at tag `v0.0.1` and commit id `b232a77`.
-    * _v<version> +<distance> <hash>_: `v0.0.1 +1 b232a77`. Built from repository in clean state (no modified files) at commit id `b232a77`, one commit away of tag `v0.0.1`.
-    * _v<version> +<distance> <hash> (@<branch>)_: `v0.0.1 +1 b232a77 (@hotfix/my-fix)`. Built from repository in clean state (no modified files) at commit id `b232a77`, one commit away of tag `v0.0.1` in branch `hotfix/my-fix`.
+* `${QSCM_SEMVER_PAT}`  
+  Patch version number (integer).
 
-    *Not all possible combinations are shown above*.
+* `${QSCM_HASH}`  
+  Commit id of the current commit. May include "+" as a sign of a dirty repository state (modified files).
 
-#### Default header template 
+* `${QSCM_DISTANCE}`  
+  Distance from the latest tag. Number greater or equal to zero.
+
+* `${QSCM_BRANCH}`  
+  Current branch name
+
+* `${QSCM_PRETTY_VERSION}`  
+  Version string that includes up to several components depending on their values:
+
+    - *v&lt;version&gt; &lt;hash&gt;*: `v0.0.1 b232a77`.  
+      Built from repository in clean state (no modified files) at tag `v0.0.1` and commit id `b232a77`.
+    - *v&lt;version&gt; &lt;hash&gt;+*: `v0.0.1 b232a77+`.  
+      Built from repository in dirty state (modified files) at tag `v0.0.1` and commit id `b232a77`.
+    - *v&lt;version&gt; +&lt;distance&gt; &lt;hash&gt;*: `v0.0.1 +1 b232a77`.  
+      Built from repository in clean state (no modified files) at commit id `b232a77`, one commit away of tag `v0.0.1`.
+    - *v&lt;version&gt; +&lt;distance&gt; &lt;hash&gt; (@&lt;branch&gt;)*: `v0.0.1 +1 b232a77 (@hotfix/my-fix)`.  
+      Built from repository in clean state (no modified files) at commit id `b232a77`, one commit away of tag `v0.0.1` in branch `hotfix/my-fix`.
+
+    **Not all possible combinations are shown above**.
+
+### Default header template 
 
 **Before substitution:**
 
-```h
-#define VERSION "${VCSQT_VERSION}"
-#define VCSQT_HASH "${VCSQT_HASH}"
-#define VCSQT_DISTANCE ${VCSQT_DISTANCE}
-#define VCSQT_BRANCH "${VCSQT_BRANCH}"
-#define VCSQT_PRETTY_VERSION "${VCSQT_PRETTY_VERSION}"
+```cpp
+#define VERSION "${QSCM_VERSION}"
+#define QSCM_SEMVER "${QSCM_SEMVER}"
+#define QSCM_SEMVER_MAJ ${QSCM_SEMVER_MAJ}
+#define QSCM_SEMVER_MIN ${QSCM_SEMVER_MIN}
+#define QSCM_SEMVER_PAT ${QSCM_SEMVER_PAT}
+#define QSCM_SEMVER_SUFFIX "${QSCM_SEMVER_SUFFIX}"
+#define QSCM_HASH "${QSCM_HASH}"
+#define QSCM_DISTANCE ${QSCM_DISTANCE}
+#define QSCM_BRANCH "${QSCM_BRANCH}"
+#define QSCM_PRETTY_VERSION "${QSCM_PRETTY_VERSION}"
 ```
 
 **After substitution (sample):**
 
-```h
-#define VERSION "0.0.1"
-#define VCSQT_HASH "c1cec22"
-#define VCSQT_DISTANCE 1
-#define VCSQT_BRANCH "master"
-#define VCSQT_PRETTY_VERSION "v0.0.1 +1 c1cec22"
+```cpp
+#define VERSION "1.2.3-rc.2+build.4567"
+#define QSCM_SEMVER "1.2.3"
+#define QSCM_SEMVER_MAJ 1
+#define QSCM_SEMVER_MIN 2
+#define QSCM_SEMVER_PAT 3
+#define QSCM_SEMVER_SUFFIX "rc.2+build.4567"
+#define QSCM_HASH "c1cec22"
+#define QSCM_DISTANCE 1
+#define QSCM_BRANCH "master"
+#define QSCM_PRETTY_VERSION "v1.2.3-rc.2+build.4567 +1 c1cec22"
 ```
+
+## Configuring QMake SCM
+
+QMake SCM defines several variables that can be defined before including the `.pri` file to alter behavior.
+
+* `QSCM_VERSION_PREFIX`  
+  Tag version prefix that should be stripped from the tag name before further processing. Also influences names of the tags `qmake-scm` will consider. Calls `git describe` with `--match="<QSCM_VERSION_PREFIX>*"` argument.
+
+  Default value is `v`.
+
+  Can be used to build multiple projects in one repository each with own version.
+
+* `qscm_debug` (`CONFIG` option)  
+  Enable debug output from `qmake-scm`.
+
+  Use `CONFIG+=qscm_debug` when calling `qmake` or in project file.
+
+* `qscm_no_version_setup` (`CONFIG` option)  
+  Turn off setup of standard `qmake` variables related to version.
+
+  Default is to setup the following variables:
+
+  ```qmake
+  VERSION = $$QSCM_SEMVER
+  VER_MAJ = $$QSCM_SEMVER_MAJ
+  VER_MIN = $$QSCM_SEMVER_MIN
+  VER_PAT = $$QSCM_SEMVER_PAT
+  ```
+
+## Known issues
+
+1. Some versions of Qt on windows platform have a bug resulting in `sed` (invoked via qmake) running forever on files containing windows line endings.
+
+   The solution is to save file with unix line endings and turn of crlf conversion via git attributes (`.gitattributes`):
+
+   ```
+   **/version.in -crlf
+   ```
