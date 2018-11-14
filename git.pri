@@ -136,16 +136,16 @@ qscm_debug: log("QSCM_SEMVER_SUFFIX:" $$QSCM_SEMVER_SUFFIX $$escape_expand(\n))
 qscm.name = Generate version headers
 qscm.input = QSCM_HEADERS
 qscm.commands += $${QMAKE_STREAM_EDITOR}
-qscm.commands += -e \"s#@{QSCM_VERSION}#$${QSCM_VERSION}#g\"
-qscm.commands += -e \"s#@{QSCM_SEMVER}#$${QSCM_SEMVER}#g\"
-qscm.commands += -e \"s#@{QSCM_SEMVER_MAJ}#$${QSCM_SEMVER_MAJ}#g\"
-qscm.commands += -e \"s#@{QSCM_SEMVER_MIN}#$${QSCM_SEMVER_MIN}#g\"
-qscm.commands += -e \"s#@{QSCM_SEMVER_PAT}#$${QSCM_SEMVER_PAT}#g\"
-qscm.commands += -e \"s#@{QSCM_SEMVER_SUFFIX}#$${QSCM_SEMVER_SUFFIX}#g\"
-qscm.commands += -e \"s#@{QSCM_HASH}#$${QSCM_HASH}#g\"
-qscm.commands += -e \"s#@{QSCM_BRANCH}#$${QSCM_BRANCH}#g\"
-qscm.commands += -e \"s#@{QSCM_DISTANCE}#$${QSCM_DISTANCE}#g\"
-qscm.commands += -e \"s#@{QSCM_PRETTY_VERSION}#$${QSCM_PRETTY_VERSION}#g\"
+qscm.commands += -e \"s|@{QSCM_VERSION}|$${QSCM_VERSION}|g\"
+qscm.commands += -e \"s|@{QSCM_SEMVER}|$${QSCM_SEMVER}|g\"
+qscm.commands += -e \"s|@{QSCM_SEMVER_MAJ}|$${QSCM_SEMVER_MAJ}|g\"
+qscm.commands += -e \"s|@{QSCM_SEMVER_MIN}|$${QSCM_SEMVER_MIN}|g\"
+qscm.commands += -e \"s|@{QSCM_SEMVER_PAT}|$${QSCM_SEMVER_PAT}|g\"
+qscm.commands += -e \"s|@{QSCM_SEMVER_SUFFIX}|$${QSCM_SEMVER_SUFFIX}|g\"
+qscm.commands += -e \"s|@{QSCM_HASH}|$${QSCM_HASH}|g\"
+qscm.commands += -e \"s|@{QSCM_BRANCH}|$${QSCM_BRANCH}|g\"
+qscm.commands += -e \"s|@{QSCM_DISTANCE}|$${QSCM_DISTANCE}|g\"
+qscm.commands += -e \"s|@{QSCM_PRETTY_VERSION}|$${QSCM_PRETTY_VERSION}|g\"
 unix {
     qscm.commands += ${QMAKE_FILE_IN} > ${QMAKE_FILE_OUT}.tmp;
     qscm.commands += if cmp ${QMAKE_FILE_OUT}.tmp ${QMAKE_FILE_OUT} >/dev/null 2>&1; then rm ${QMAKE_FILE_OUT}.tmp; else mv ${QMAKE_FILE_OUT}.tmp ${QMAKE_FILE_OUT}; fi
