@@ -11,4 +11,4 @@ Unreleased changes will be added to this section.
 Public release of the project.
 
 
-[Unreleased]: https://gitlab.com/dm0/qmake-scm/compare/v1.0.0...HEAD
+[Unreleased]: https://gitlab.com/dm0/qmake-scm/compare/v1.0.0...develop
