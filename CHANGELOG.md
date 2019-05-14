@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 Unreleased changes will be added to this section.
 
+### Fixed
+* `QSCM_SEMVER` now follows semantic versioning.  
+  This variable previously contained only simple version information in `x.y.z`
+  format.  
+  This variable is different from `QSCM_VERSION` in that it contains normalized
+  version with required dash after the `x.y.z` part.
+
+### Added
+* `QSCM_SEMVER_SIMPLE` variable contains simple version number (without 
+  suffix).
+
+### Changed
+* On Unix platforms except for mac `VERSION` variable is set to contain full
+  semantic version. Windows and mac platforms use simple version.
+
+
 ## 2018-11-16 v1.0.0
 Public release of the project.
 
