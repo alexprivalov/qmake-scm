@@ -129,8 +129,8 @@ qscm_debug: log("QSCM_SEMVER_SUFFIX:" $$QSCM_SEMVER_SUFFIX $$escape_expand(\n))
 
 
 !qscm_no_version_setup {
-    macx:VERSION = $$QSCM_SEMVER_SIMPLE
-    else:VERSION = $$QSCM_SEMVER
+    unix:!macx: VERSION = $$QSCM_SEMVER
+    else: VERSION = $$QSCM_SEMVER_SIMPLE
     VER_MAJ = $$QSCM_SEMVER_MAJ
     VER_MIN = $$QSCM_SEMVER_MIN
     VER_PAT = $$QSCM_SEMVER_PAT
