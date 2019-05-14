@@ -108,18 +108,20 @@ QSCM_PRETTY_VERSION += $$QSCM_HASH
 !isEqual(QSCM_BRANCH, master) {
     QSCM_PRETTY_VERSION += (@$$QSCM_BRANCH)
 }
-QSCM_SEMVER= $$QSCM_VERSION
-QSCM_SEMVER_SUFFIX= $$QSCM_VERSION
+QSCM_SEMVER = $$QSCM_VERSION
+QSCM_SEMVER_SUFFIX = $$QSCM_VERSION
 QSCM_SEMVER_SUFFIX ~= s/^(\d+\.)*\d+/
-QSCM_SEMVER=$$replace(QSCM_SEMVER,$$QSCM_SEMVER_SUFFIX,)
+QSCM_SEMVER_SIMPLE = $$replace(QSCM_SEMVER,$$QSCM_SEMVER_SUFFIX,)
 QSCM_SEMVER_SUFFIX ~= s/^(-|\+)*/
-QSCM_SEMVER_LIST = $$split(QSCM_SEMVER, ".")
+QSCM_SEMVER = $${QSCM_SEMVER_SIMPLE}-$${QSCM_SEMVER_SUFFIX}
+QSCM_SEMVER_LIST = $$split(QSCM_SEMVER_SIMPLE, ".")
 QSCM_SEMVER_MAJ = $$member(QSCM_SEMVER_LIST, 0)
 QSCM_SEMVER_MIN = $$member(QSCM_SEMVER_LIST, 1)
 QSCM_SEMVER_PAT = $$member(QSCM_SEMVER_LIST, 2)
 
 qscm_debug: log("QSCM_VERSION:" $$QSCM_VERSION $$escape_expand(\n))
 qscm_debug: log("QSCM_SEMVER:" $$QSCM_SEMVER $$escape_expand(\n))
+qscm_debug: log("QSCM_SEMVER_SIMPLE:" $$QSCM_SEMVER_SIMPLE $$escape_expand(\n))
 qscm_debug: log("QSCM_SEMVER_MAJ:" $$QSCM_SEMVER_MAJ $$escape_expand(\n))
 qscm_debug: log("QSCM_SEMVER_MIN:" $$QSCM_SEMVER_MIN $$escape_expand(\n))
 qscm_debug: log("QSCM_SEMVER_PAT:" $$QSCM_SEMVER_PAT $$escape_expand(\n))
@@ -127,10 +129,16 @@ qscm_debug: log("QSCM_SEMVER_SUFFIX:" $$QSCM_SEMVER_SUFFIX $$escape_expand(\n))
 
 
 !qscm_no_version_setup {
-    VERSION = $$QSCM_SEMVER
+    unix:!macx: VERSION = $$QSCM_SEMVER
+    else: VERSION = $$QSCM_SEMVER_SIMPLE
     VER_MAJ = $$QSCM_SEMVER_MAJ
     VER_MIN = $$QSCM_SEMVER_MIN
     VER_PAT = $$QSCM_SEMVER_PAT
+    qscm_debug: log("QSCM: Version setup:" $$escape_expand(\n))
+    qscm_debug: log($$escape_expand(\t) "VERSION:" $$VERSION $$escape_expand(\n))
+    qscm_debug: log($$escape_expand(\t) "VER_MAJ:" $$VER_MAJ $$escape_expand(\n))
+    qscm_debug: log($$escape_expand(\t) "VER_MIN:" $$VER_MIN $$escape_expand(\n))
+    qscm_debug: log($$escape_expand(\t) "VER_PAT:" $$VER_PAT $$escape_expand(\n))
 }
 
 qscm.name = Generate version headers
