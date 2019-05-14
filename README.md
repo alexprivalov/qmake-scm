@@ -63,14 +63,18 @@ Version header file generated using template substitution. Following pattern are
 
 * `@{QSCM_VERSION}`  
   Version string in the form `1.2.3` without prefix.  
-  Also includes all other parts like pre-release identifiers and build numbers if they exist in the tag: `1.2.3-rc.1+build`.
+  Also includes all other parts like pre-release identifiers and build numbers as they exist in the tag: `1.2.3rc.1+build`.
 
-* `@{QSCM_SEMVER}`  
+* `@{QSCM_SEMVER_SIMPLE}`  
   Version string containing only major, minor and patch numbers, for example `1.2.3`.
 
 * `@{QSCM_SEMVER_SUFFIX}`  
-  The rest of the version string.  
-  `@{QSCM_VERSION}` = `@{QSCM_SEMVER}` + `@{QSCM_SEMVER_SUFFIX}` (`+` is concatenation).
+  The rest of the version string with stripped leading `-` and `+`.  
+
+* `@{QSCM_SEMVER}`  
+  Version string that follows semantic versioning.  
+  `@{QSCM_SEMVER}` = `@{QSCM_SEMVER}` + `-` + `@{QSCM_SEMVER_SUFFIX}` (`+` 
+  is concatenation).
 
 * `@{QSCM_SEMVER_MAJ}`  
   Major version number (integer).
@@ -111,6 +115,7 @@ Version header file generated using template substitution. Following pattern are
 ```cpp
 #define VERSION "@{QSCM_VERSION}"
 #define QSCM_SEMVER "@{QSCM_SEMVER}"
+#define QSCM_SEMVER_SIMPLE "@{QSCM_SEMVER_SIMPLE}"
 #define QSCM_SEMVER_MAJ @{QSCM_SEMVER_MAJ}
 #define QSCM_SEMVER_MIN @{QSCM_SEMVER_MIN}
 #define QSCM_SEMVER_PAT @{QSCM_SEMVER_PAT}
@@ -124,8 +129,9 @@ Version header file generated using template substitution. Following pattern are
 **After substitution (sample):**
 
 ```cpp
-#define VERSION "1.2.3-rc.2+build.4567"
-#define QSCM_SEMVER "1.2.3"
+#define VERSION "1.2.3rc.2+build.4567"
+#define QSCM_SEMVER "1.2.3-rc.2+build.4567"
+#define QSCM_SEMVER_SIMPLE "1.2.3"
 #define QSCM_SEMVER_MAJ 1
 #define QSCM_SEMVER_MIN 2
 #define QSCM_SEMVER_PAT 3
