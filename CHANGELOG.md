@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 Unreleased changes will be added to this section.
 
+
+## 2019-05-14 [v1.1.0]
+
 ### Fixed
 * `QSCM_SEMVER` now follows semantic versioning.  
   This variable previously contained only simple version information in `x.y.z`
@@ -22,9 +25,11 @@ Unreleased changes will be added to this section.
 * On Unix platforms except for mac `VERSION` variable is set to contain full
   semantic version. Windows and mac platforms use simple version.
 
+[v1.1.0]: https://gitlab.com/dm0/qmake-scm/compare/v1.0.0...v1.1.0
+
 
 ## 2018-11-16 v1.0.0
 Public release of the project.
 
 
-[Unreleased]: https://gitlab.com/dm0/qmake-scm/compare/v1.0.0...develop
+[Unreleased]: https://gitlab.com/dm0/qmake-scm/compare/v1.1.0...develop
