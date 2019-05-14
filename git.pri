@@ -133,6 +133,11 @@ qscm_debug: log("QSCM_SEMVER_SUFFIX:" $$QSCM_SEMVER_SUFFIX $$escape_expand(\n))
     VER_MAJ = $$QSCM_SEMVER_MAJ
     VER_MIN = $$QSCM_SEMVER_MIN
     VER_PAT = $$QSCM_SEMVER_PAT
+    qscm_debug: log("QSCM: Version setup:" $$escape_expand(\n))
+    qscm_debug: log($$escape_expand(\t) "VERSION:" $$VERSION $$escape_expand(\n))
+    qscm_debug: log($$escape_expand(\t) "VER_MAJ:" $$VER_MAJ $$escape_expand(\n))
+    qscm_debug: log($$escape_expand(\t) "VER_MIN:" $$VER_MIN $$escape_expand(\n))
+    qscm_debug: log($$escape_expand(\t) "VER_PAT:" $$VER_PAT $$escape_expand(\n))
 }
 
 qscm.name = Generate version headers
