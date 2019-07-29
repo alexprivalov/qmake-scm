@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Unreleased changes will be added to this section.
 
 
+## 2019-07-30 [v1.1.1]
+
+## Fixed
+* `QSCM_SEMVER` to not end with `-` if `QSCM_SEMVER_SUFFIX` is empty
+
 ## 2019-05-14 [v1.1.0]
 
 ### Fixed
