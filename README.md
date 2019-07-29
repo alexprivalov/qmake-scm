@@ -74,7 +74,7 @@ Version header file generated using template substitution. Following pattern are
 * `@{QSCM_SEMVER}`  
   Version string that follows semantic versioning.  
   `@{QSCM_SEMVER}` = `@{QSCM_SEMVER}` + `-` + `@{QSCM_SEMVER_SUFFIX}` (`+` 
-  is concatenation).
+  is concatenation, only performed if suffix is not empty).
 
 * `@{QSCM_SEMVER_MAJ}`  
   Major version number (integer).
