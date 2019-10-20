@@ -147,6 +147,7 @@ qscm.input = QSCM_HEADERS
 qscm.commands += $${QMAKE_STREAM_EDITOR}
 qscm.commands += -e \"s|@{QSCM_VERSION}|$${QSCM_VERSION}|g\"
 qscm.commands += -e \"s|@{QSCM_SEMVER}|$${QSCM_SEMVER}|g\"
+qscm.commands += -e \"s|@{QSCM_SEMVER_SIMPLE}|$${QSCM_SEMVER_SIMPLE}|g\"
 qscm.commands += -e \"s|@{QSCM_SEMVER_MAJ}|$${QSCM_SEMVER_MAJ}|g\"
 qscm.commands += -e \"s|@{QSCM_SEMVER_MIN}|$${QSCM_SEMVER_MIN}|g\"
 qscm.commands += -e \"s|@{QSCM_SEMVER_PAT}|$${QSCM_SEMVER_PAT}|g\"
