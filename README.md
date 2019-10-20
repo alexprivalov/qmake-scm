@@ -6,15 +6,13 @@ Tags should follow [Semantic Versioning](https://semver.org/) with optional [pre
 
 ## How to use
 
-1. Add `qmake-scm` submodule to your project
-2. Copy default header template `version.in` to you project (and add to version control). Or create your own header template using [substitutions](#markdown-header-substitutions).
-3. Include `git.pri` in your QMake project file:  
-   `include(qmake-scm/git.pri)` (path depends on the project structure).
-4. Add header templates that should be processed to `QSCM_HEADERS` variable:  
-   `QSCM_HEADERS += $$PWD/version.in` (path depends on the header template file location).
-5. Include `version.h` to you sources and use defines.  
-   Additionally `git.pri` also defines variables `VERSION`, `VER_MAJ`, `VER_MIN`, `VER_PAT` that influence version of shared library and application projects.
-6. Use tags in the form `v1.2.3` to specify version of your project (version prefix is [configurable](#configuring-qmake-scm)).
+1. Copy `version.in` and `git.pri` to your project.  
+   _(Alternatively include this project as a submodule)_
+2. Add `QSCM_HEADERS += $$PWD/version.in` line to your project `.pro`-file.
+3. Include `version.h` and use defines (the file is created on first build).
+4. Use tags in the form `v1.2.3` in your project.
+
+See next changes to find out how to create your own templates using [substitutions](#markdown-header-substitutions) or change [version prefix](#configuring-qmake-scm)).
 
 ### [Optional] Make version control work with exported repository
 
