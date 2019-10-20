@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 Unreleased changes will be added to this section.
 
+### Fixed
+* Fixed `QSCM_SEMVER_SIMPLE` substitution was not replaced while generating 
+  header.
+
 
 ## 2019-07-30 [v1.1.1]
 
