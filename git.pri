@@ -93,7 +93,7 @@ isEmpty(QSCM_BRANCH) {
         QSCM_DISTANCE=$$system(git -C $$_PRO_FILE_PWD_ rev-list --count HEAD)
         QSCM_VERSION=0.0.0
         QSCM_HASH=$$system(git -C $$_PRO_FILE_PWD_ rev-parse --short HEAD)
-        system(git -C $$_PRO_FILE_PWD_ diff-index --quiet HEAD): QSCM_HASH=$${QSCM_HASH}+
+        !isEmpty(system(git -C $$_PRO_FILE_PWD_ diff-index --quiet HEAD)): QSCM_HASH=$${QSCM_HASH}+
     }
 }
 
