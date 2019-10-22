@@ -1,11 +1,13 @@
 isEmpty(QSCM_VERSION_PREFIX):QSCM_VERSION_PREFIX=v
 
-QSCM_DESCRIBE=$$system(git -C $$_PRO_FILE_PWD_ describe --long --tags --dirty=+ --match="$$QSCM_VERSION_PREFIX*")
+QSCM_DESCRIBE=$$system(git -C $$_PRO_FILE_PWD_ describe --long --tags --match="$$QSCM_VERSION_PREFIX*")
 # sample data: v0.4.0-5-ga8152a7
 QSCM_BRANCH=$$system(git -C $$_PRO_FILE_PWD_ rev-parse --abbrev-ref HEAD)
+QSCM_REPO_STATUS=$$system(git -C $$_PRO_FILE_PWD_ status -s)
 
 qscm_debug: log("QSCM_GIT_DESCRIBE:" $$QSCM_DESCRIBE $$escape_expand(\n))
 qscm_debug: log("QSCM_GIT_BRANCH:" $$QSCM_BRANCH $$escape_expand(\n))
+qscm_debug: log("QSCM_GIT_STATUS:" $$QSCM_REPO_STATUS $$escape_expand(\n))
 
 # not running from repository or git unavailable
 isEmpty(QSCM_BRANCH) {
@@ -93,10 +95,8 @@ isEmpty(QSCM_BRANCH) {
         QSCM_DISTANCE=$$system(git -C $$_PRO_FILE_PWD_ rev-list --count HEAD)
         QSCM_VERSION=0.0.0
         QSCM_HASH=$$system(git -C $$_PRO_FILE_PWD_ rev-parse --short HEAD)
-        QSCM_REPO_STATUS=$$system(git -C $$_PRO_FILE_PWD_ status -s)
-        qscm_debug: log("QSCM_REPO_STATUS:" $$QSCM_REPO_STATUS $$escape_expand(\n))
-        !isEmpty(QSCM_REPO_STATUS): QSCM_HASH=$${QSCM_HASH}+
     }
+    !isEmpty(QSCM_REPO_STATUS): QSCM_HASH=$${QSCM_HASH}+
 }
 
 qscm_debug: log("QSCM_BRANCH:" $$QSCM_BRANCH $$escape_expand(\n))
