@@ -89,7 +89,7 @@ isEmpty(QSCM_BRANCH) {
         QSCM_HASH=$$member(QSCM_DESCRIBE, -1)
         QSCM_HASH=$$section(QSCM_HASH,,2)
     }else {
-        qscm_debug: log("QSCM: No refs found" $$escape_expand(\n))
+        qscm_debug: log("QSCM: No tags found" $$escape_expand(\n))
         QSCM_DISTANCE=$$system(git -C $$_PRO_FILE_PWD_ rev-list --count HEAD)
         QSCM_VERSION=0.0.0
         QSCM_HASH=$$system(git -C $$_PRO_FILE_PWD_ rev-parse --short HEAD)
