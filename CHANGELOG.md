@@ -11,6 +11,9 @@ Unreleased changes will be added to this section.
 * Fixed `QSCM_SEMVER_SIMPLE` substitution was not replaced while generating 
   header.
 
+### Changed
+* Minor improvements in debug messages.
+
 
 ## 2019-07-30 [v1.1.1]
 
