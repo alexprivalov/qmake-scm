@@ -13,6 +13,7 @@ Unreleased changes will be added to this section.
 
 ### Changed
 * Minor improvements in debug messages.
+* Untracked (and not ignored) files now commit to dirty state of the repo.
 
 
 ## 2019-07-30 [v1.1.1]
