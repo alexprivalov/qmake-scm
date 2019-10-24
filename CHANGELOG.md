@@ -10,6 +10,8 @@ Unreleased changes will be added to this section.
 ### Fixed
 * Fixed `QSCM_SEMVER_SIMPLE` substitution was not replaced while generating 
   header.
+* Fixed handling of exported repositories with missing version file (default 
+  is`version.txt`).
 
 ### Changed
 * Minor improvements in debug messages.
