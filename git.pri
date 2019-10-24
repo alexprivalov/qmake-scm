@@ -16,7 +16,7 @@ isEmpty(QSCM_BRANCH) {
     # sample data: HEAD -> master, tag: v0.0.3, 3e575e9
     isEmpty(QSCM_EXPORTED_VERSION_FILE): QSCM_EXPORTED_VERSION_FILE=$$PWD/version.txt
     QSCM_VERSION_INFO=$$cat($$QSCM_EXPORTED_VERSION_FILE)
-    isEqual(QSCM_VERSION_INFO, "$Format:%D, %h$") {
+    isEmpty(QSCM_VERSION_INFO) | isEqual(QSCM_VERSION_INFO, "$Format:%D, %h$") {
         warning("No version information available: building from unexported version")
         QSCM_DISTANCE=0
         QSCM_HASH=?
