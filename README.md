@@ -12,7 +12,7 @@ Tags should follow [Semantic Versioning](https://semver.org/) with optional [pre
 3. Include `version.h` and use defines (the file is created on first build).
 4. Use tags in the form `v1.2.3` in your project.
 
-See next changes to find out how to create your own templates using [substitutions](#markdown-header-substitutions) or change [version prefix](#configuring-qmake-scm)).
+See next sections to find out how to create your own templates using [substitutions](#markdown-header-substitutions), change [version prefix](#configuring-qmake-scm)) and support exported (archived) repositories.
 
 ### [Optional] Make version control work with exported repository
 
@@ -167,6 +167,13 @@ QMake SCM defines several variables that can be defined before including the `.p
   VER_MIN = $$QSCM_SEMVER_MIN
   VER_PAT = $$QSCM_SEMVER_PAT
   ```
+
+* `qscm_no_force_qmake` (`CONFIG` option)  
+  Starting from version 1.2 QMake SCM calls `qmake` to update version 
+  information with every build. This can be turned off by using 
+  `qscm_no_force_qmake`.  
+  Added in version `1.2`.
+
 
 ## Known issues
 
