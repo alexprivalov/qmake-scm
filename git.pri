@@ -24,6 +24,7 @@ isEmpty(QSCM_BRANCH) {
         QSCM_VERSION=0.0.0
     } else {
         QSCM_VERSION_INFO=$$replace(QSCM_VERSION_INFO, ",", )
+        qscm_debug: log("QSCM_VERSION_INFO: " $$QSCM_VERSION_INFO $$escape_expand(\n))
         QSCM_VERSION_INFO_NUM_COMPONENTS=$$size(QSCM_VERSION_INFO)
         QSCM_VERSION_INFO_COMPONENT_3=$$member(QSCM_VERSION_INFO, 3)
         QSCM_HASH=$$last(QSCM_VERSION_INFO)
