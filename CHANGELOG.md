@@ -7,11 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 Unreleased changes will be added to this section.
 
+### Added
+* Pre-release version information and build metadata are now parsed separately.
+  Added substitutions: `@{QSCM_SEMVER_PREREL}` and `@{QSCM_SEMVER_BUILD}`.
+
 ### Fixed
 * Fixed `QSCM_SEMVER_SIMPLE` substitution was not replaced while generating 
   header.
 * Fixed handling of exported repositories with missing version file (default 
   is`version.txt`).
+* Fixed handling of version strings containing build metadata without 
+  pre-release version (they had `-` prefix instead of `+`).
 
 ### Changed
 * QMake SCM now calls `qmake` with every build to always have accurate version 
