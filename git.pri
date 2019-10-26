@@ -145,20 +145,26 @@ qscm_debug: log("QSCM_SEMVER_SUFFIX:" $$QSCM_SEMVER_SUFFIX $$escape_expand(\n))
     qscm_debug: log($$escape_expand(\t) "VER_PAT:" $$VER_PAT $$escape_expand(\n))
 }
 
+QSCM_SUBSTITUTIONS = \
+    s|@{QSCM_VERSION}|$${QSCM_VERSION}|g\
+    s|@{QSCM_SEMVER}|$${QSCM_SEMVER}|g\
+    s|@{QSCM_SEMVER_SIMPLE}|$${QSCM_SEMVER_SIMPLE}|g\
+    s|@{QSCM_SEMVER_MAJ}|$${QSCM_SEMVER_MAJ}|g\
+    s|@{QSCM_SEMVER_MIN}|$${QSCM_SEMVER_MIN}|g\
+    s|@{QSCM_SEMVER_PAT}|$${QSCM_SEMVER_PAT}|g\
+    s|@{QSCM_SEMVER_SUFFIX}|$${QSCM_SEMVER_SUFFIX}|g\
+    s|@{QSCM_HASH}|$${QSCM_HASH}|g\
+    s|@{QSCM_BRANCH}|$${QSCM_BRANCH}|g\
+    s|@{QSCM_DISTANCE}|$${QSCM_DISTANCE}|g\
+    s|@{QSCM_PRETTY_VERSION}|$$join(QSCM_PRETTY_VERSION, " ")|g\
+
+QSCM_SUBSTITUTIONS_FILE = "$$OUT_PWD/qscmsubst.sed"
+write_file($$QSCM_SUBSTITUTIONS_FILE, QSCM_SUBSTITUTIONS)
+
 qscm.name = Generate version headers
 qscm.input = QSCM_HEADERS
 qscm.commands += $${QMAKE_STREAM_EDITOR}
-qscm.commands += -e \"s|@{QSCM_VERSION}|$${QSCM_VERSION}|g\"
-qscm.commands += -e \"s|@{QSCM_SEMVER}|$${QSCM_SEMVER}|g\"
-qscm.commands += -e \"s|@{QSCM_SEMVER_SIMPLE}|$${QSCM_SEMVER_SIMPLE}|g\"
-qscm.commands += -e \"s|@{QSCM_SEMVER_MAJ}|$${QSCM_SEMVER_MAJ}|g\"
-qscm.commands += -e \"s|@{QSCM_SEMVER_MIN}|$${QSCM_SEMVER_MIN}|g\"
-qscm.commands += -e \"s|@{QSCM_SEMVER_PAT}|$${QSCM_SEMVER_PAT}|g\"
-qscm.commands += -e \"s|@{QSCM_SEMVER_SUFFIX}|$${QSCM_SEMVER_SUFFIX}|g\"
-qscm.commands += -e \"s|@{QSCM_HASH}|$${QSCM_HASH}|g\"
-qscm.commands += -e \"s|@{QSCM_BRANCH}|$${QSCM_BRANCH}|g\"
-qscm.commands += -e \"s|@{QSCM_DISTANCE}|$${QSCM_DISTANCE}|g\"
-qscm.commands += -e \"s|@{QSCM_PRETTY_VERSION}|$${QSCM_PRETTY_VERSION}|g\"
+qscm.commands += -f $$shell_quote($$QSCM_SUBSTITUTIONS_FILE)
 unix {
     qscm.commands += ${QMAKE_FILE_IN} > ${QMAKE_FILE_OUT}.tmp;
     qscm.commands += if cmp ${QMAKE_FILE_OUT}.tmp ${QMAKE_FILE_OUT} >/dev/null 2>&1; then rm ${QMAKE_FILE_OUT}.tmp; else mv ${QMAKE_FILE_OUT}.tmp ${QMAKE_FILE_OUT}; fi
@@ -167,7 +173,7 @@ win32 {
     qscm.commands += ${QMAKE_FILE_IN} > ${QMAKE_FILE_OUT}
 }
 qscm.output = ${QMAKE_FILE_IN_BASE}.h
-qscm.clean = ${QMAKE_FILE_OUT}
+qscm.clean = ${QMAKE_FILE_OUT} $${QSCM_SUBSTITUTIONS_FILE}
 qscm.depends = .
 qscm.CONFIG = no_link target_predeps
 
