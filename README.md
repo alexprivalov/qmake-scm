@@ -64,15 +64,25 @@ Version header file generated using template substitution. Following pattern are
   Also includes all other parts like pre-release identifiers and build numbers as they exist in the tag: `1.2.3rc.1+build`.
 
 * `@{QSCM_SEMVER_SIMPLE}`  
-  Version string containing only major, minor and patch numbers, for example `1.2.3`.
+  Version string containing only major, minor and patch numbers, for example 
+  `1.2.3`.
 
 * `@{QSCM_SEMVER_SUFFIX}`  
-  The rest of the version string with stripped leading `-` and `+`.  
+  The rest of the version string with stripped leading `-` and `+`.
+
+* `@{QSCM_SEMVER_PREREL}`  
+  Pre-release part of semantic version. Dot-delimited part that follows 
+  version. Doesn include build metadata (starts after `+`).
+
+* `@{QSCM_SEMVER_BUILD}`  
+  Build metadata part of semantic version. Dot-delimited part that starts 
+  after `+`.
 
 * `@{QSCM_SEMVER}`  
   Version string that follows semantic versioning.  
-  `@{QSCM_SEMVER}` = `@{QSCM_SEMVER}` + `-` + `@{QSCM_SEMVER_SUFFIX}` (`+` 
-  is concatenation, only performed if suffix is not empty).
+  `@{QSCM_SEMVER}` = `@{QSCM_SEMVER}` + `-` + `@{QSCM_SEMVER_PREREL}` + `+` + 
+  `@{QSCM_SEMVER_BUILD}` (`+` is concatenation, pre-release and build metadata 
+  parts are only added if they are not empty).
 
 * `@{QSCM_SEMVER_MAJ}`  
   Major version number (integer).
