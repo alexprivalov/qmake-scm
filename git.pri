@@ -115,9 +115,23 @@ QSCM_SEMVER = $$QSCM_VERSION
 QSCM_SEMVER_SUFFIX = $$QSCM_VERSION
 QSCM_SEMVER_SUFFIX ~= s/^(\d+\.){0,2}\d+/
 QSCM_SEMVER_SIMPLE = $$replace(QSCM_SEMVER,$$re_escape($$QSCM_SEMVER_SUFFIX),)
+
+# Extract pre-release
+QSCM_SEMVER_PREREL = $$QSCM_SEMVER_SUFFIX
+QSCM_SEMVER_PREREL ~= s/\+[0-9A-Za-z.-]+$/
+QSCM_SEMVER_PREREL ~= s/^-*/
+
+# Extract buildinfo
+QSCM_SEMVER_BUILD = $$QSCM_SEMVER_SUFFIX
+QSCM_SEMVER_BUILD ~= s/^-?([0-9A-Za-z.-]+)/
+QSCM_SEMVER_BUILD ~= s/^\+*/
+
+# Remove leading "-" or "+" from prefix
 QSCM_SEMVER_SUFFIX ~= s/^(-|\+)*/
-isEmpty(QSCM_SEMVER_SUFFIX):QSCM_SEMVER = $${QSCM_SEMVER_SIMPLE}
-else:QSCM_SEMVER = $${QSCM_SEMVER_SIMPLE}-$${QSCM_SEMVER_SUFFIX}
+
+QSCM_SEMVER=$${QSCM_SEMVER_SIMPLE}
+!isEmpty(QSCM_SEMVER_PREREL):QSCM_SEMVER = $${QSCM_SEMVER}-$${QSCM_SEMVER_PREREL}
+!isEmpty(QSCM_SEMVER_BUILD):QSCM_SEMVER = $${QSCM_SEMVER}+$${QSCM_SEMVER_BUILD}
 QSCM_SEMVER_LIST = $$split(QSCM_SEMVER_SIMPLE, ".")
 QSCM_SEMVER_MAJ = $$member(QSCM_SEMVER_LIST, 0)
 QSCM_SEMVER_MIN = $$member(QSCM_SEMVER_LIST, 1)
@@ -130,6 +144,8 @@ qscm_debug: log("QSCM_SEMVER_MAJ:" $$QSCM_SEMVER_MAJ $$escape_expand(\n))
 qscm_debug: log("QSCM_SEMVER_MIN:" $$QSCM_SEMVER_MIN $$escape_expand(\n))
 qscm_debug: log("QSCM_SEMVER_PAT:" $$QSCM_SEMVER_PAT $$escape_expand(\n))
 qscm_debug: log("QSCM_SEMVER_SUFFIX:" $$QSCM_SEMVER_SUFFIX $$escape_expand(\n))
+qscm_debug: log("QSCM_SEMVER_PREREL:" $$QSCM_SEMVER_PREREL $$escape_expand(\n))
+qscm_debug: log("QSCM_SEMVER_BUILD:" $$QSCM_SEMVER_BUILD $$escape_expand(\n))
 
 
 !qscm_no_version_setup {
@@ -152,6 +168,8 @@ QSCM_SUBSTITUTIONS = \
     s|@{QSCM_SEMVER_MAJ}|$${QSCM_SEMVER_MAJ}|g\
     s|@{QSCM_SEMVER_MIN}|$${QSCM_SEMVER_MIN}|g\
     s|@{QSCM_SEMVER_PAT}|$${QSCM_SEMVER_PAT}|g\
+    s|@{QSCM_SEMVER_PREREL}|$${QSCM_SEMVER_PREREL}|g\
+    s|@{QSCM_SEMVER_BUILD}|$${QSCM_SEMVER_BUILD}|g\
     s|@{QSCM_SEMVER_SUFFIX}|$${QSCM_SEMVER_SUFFIX}|g\
     s|@{QSCM_HASH}|$${QSCM_HASH}|g\
     s|@{QSCM_BRANCH}|$${QSCM_BRANCH}|g\
