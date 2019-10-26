@@ -14,8 +14,13 @@ Unreleased changes will be added to this section.
   is`version.txt`).
 
 ### Changed
-* Minor improvements in debug messages.
+* QMake SCM now calls `qmake` with every build to always have accurate version 
+  information.  
+  A new `CONFIG` option `qscm_no_force_qmake` can be used to 
+  revert to the previous behavior (get version information only at `qmake` 
+  call).
 * Untracked (and not ignored) files now commit to dirty state of the repo.
+* Minor improvements in debug messages.
 
 
 ## 2019-07-30 [v1.1.1]
