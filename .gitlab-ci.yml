@@ -1,0 +1,19 @@
+stages:
+  - test
+  - publish
+
+tests:
+  image: "${CI_REGISTRY}/dm0/qmake-scm-tests/qscm-testenv:v1.0.0"
+  stage: test
+
+  script:
+  - git clone https://gitlab.com/dm0/qmake-scm-tests.git
+  - cd qmake-scm-tests
+  - tox -- --qscm-path ..
+
+  except:
+    - tags
+
+  artifacts:
+    reports:
+      junit: junit.xml
