@@ -6,15 +6,13 @@ Tags should follow [Semantic Versioning](https://semver.org/) with optional [pre
 
 ## How to use
 
-1. Add `qmake-scm` submodule to your project
-2. Copy default header template `version.in` to you project (and add to version control). Or create your own header template using [substitutions](#markdown-header-substitutions).
-3. Include `git.pri` in your QMake project file:  
-   `include(qmake-scm/git.pri)` (path depends on the project structure).
-4. Add header templates that should be processed to `QSCM_HEADERS` variable:  
-   `QSCM_HEADERS += $$PWD/version.in` (path depends on the header template file location).
-5. Include `version.h` to you sources and use defines.  
-   Additionally `git.pri` also defines variables `VERSION`, `VER_MAJ`, `VER_MIN`, `VER_PAT` that influence version of shared library and application projects.
-6. Use tags in the form `v1.2.3` to specify version of your project (version prefix is [configurable](#configuring-qmake-scm)).
+1. Copy `version.in` and `git.pri` to your project.  
+   _(Alternatively include this project as a submodule)_
+2. Add `QSCM_HEADERS += $$PWD/version.in` line to your project `.pro`-file.
+3. Include `version.h` and use defines (the file is created on first build).
+4. Use tags in the form `v1.2.3` in your project.
+
+See next sections to find out how to create your own templates using [substitutions](#markdown-header-substitutions), change [version prefix](#configuring-qmake-scm)) and support exported (archived) repositories.
 
 ### [Optional] Make version control work with exported repository
 
@@ -66,15 +64,25 @@ Version header file generated using template substitution. Following pattern are
   Also includes all other parts like pre-release identifiers and build numbers as they exist in the tag: `1.2.3rc.1+build`.
 
 * `@{QSCM_SEMVER_SIMPLE}`  
-  Version string containing only major, minor and patch numbers, for example `1.2.3`.
+  Version string containing only major, minor and patch numbers, for example 
+  `1.2.3`.
 
 * `@{QSCM_SEMVER_SUFFIX}`  
-  The rest of the version string with stripped leading `-` and `+`.  
+  The rest of the version string with stripped leading `-` and `+`.
+
+* `@{QSCM_SEMVER_PREREL}`  
+  Pre-release part of semantic version. Dot-delimited part that follows 
+  version. Doesn include build metadata (starts after `+`).
+
+* `@{QSCM_SEMVER_BUILD}`  
+  Build metadata part of semantic version. Dot-delimited part that starts 
+  after `+`.
 
 * `@{QSCM_SEMVER}`  
   Version string that follows semantic versioning.  
-  `@{QSCM_SEMVER}` = `@{QSCM_SEMVER}` + `-` + `@{QSCM_SEMVER_SUFFIX}` (`+` 
-  is concatenation, only performed if suffix is not empty).
+  `@{QSCM_SEMVER}` = `@{QSCM_SEMVER}` + `-` + `@{QSCM_SEMVER_PREREL}` + `+` + 
+  `@{QSCM_SEMVER_BUILD}` (`+` is concatenation, pre-release and build metadata 
+  parts are only added if they are not empty).
 
 * `@{QSCM_SEMVER_MAJ}`  
   Major version number (integer).
@@ -170,12 +178,34 @@ QMake SCM defines several variables that can be defined before including the `.p
   VER_PAT = $$QSCM_SEMVER_PAT
   ```
 
+* `qscm_no_force_qmake` (`CONFIG` option)  
+  Starting from version 1.2 QMake SCM calls `qmake` to update version 
+  information with every build. This can be turned off by using 
+  `qscm_no_force_qmake`.  
+  Added in version `1.2`.
+
+
+## Testing
+
+Tests for this project are maintained in a separate repository [QMake SCM Tests](https://gitlab.com/dm0/qmake-scm-tests).
+
+A separate repository allows to keep code of this repository clean.
+
+
 ## Known issues
 
-1. Some versions of Qt on windows platform have a bug resulting in `sed` (invoked via qmake) running forever on files containing windows line endings.
+1. Some versions of Qt on windows platform have a bug resulting in `sed` 
+   (invoked via qmake) running forever on files containing windows line 
+   endings.
 
    The solution is to save file with unix line endings and turn of crlf conversion via git attributes (`.gitattributes`):
 
    ```
    **/version.in -crlf
    ```
+
+2. Some VCS hostings (at least GitLab) fetch not all references in their CI
+   builds. This results in branch information is not available and branch
+   name reported as master.
+
+   A workaround is to run `git fetch` before building project.
