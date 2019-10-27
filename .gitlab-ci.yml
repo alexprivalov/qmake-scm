@@ -3,7 +3,7 @@ stages:
   - publish
 
 tests:
-  image: "${CI_REGISTRY}/dm0/qmake-scm-tests/qscm-testenv:v1.0.0"
+  image: "${CI_REGISTRY}/dm0/qmake-scm-tests/qscm-testenv:v1.0.1"
   stage: test
 
   script:
