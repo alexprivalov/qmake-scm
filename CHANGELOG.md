@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 Unreleased changes will be added to this section.
 
+
+## 2019-10-27 [v1.2.0]
+
 ### Added
 * Pre-release version information and build metadata are now parsed separately.
   Added substitutions: `@{QSCM_SEMVER_PREREL}` and `@{QSCM_SEMVER_BUILD}`.
@@ -30,11 +33,16 @@ Unreleased changes will be added to this section.
 * Untracked (and not ignored) files now commit to dirty state of the repo.
 * Minor improvements in debug messages.
 
+[v1.2.0]: https://gitlab.com/dm0/qmake-scm/compare/v1.1.1...v1.2.0
+
 
 ## 2019-07-30 [v1.1.1]
 
 ## Fixed
 * `QSCM_SEMVER` to not end with `-` if `QSCM_SEMVER_SUFFIX` is empty
+
+[v1.1.1]: https://gitlab.com/dm0/qmake-scm/compare/v1.1.0...v1.1.1
+
 
 ## 2019-05-14 [v1.1.0]
 
@@ -60,4 +68,4 @@ Unreleased changes will be added to this section.
 Public release of the project.
 
 
-[Unreleased]: https://gitlab.com/dm0/qmake-scm/compare/v1.1.0...develop
+[Unreleased]: https://gitlab.com/dm0/qmake-scm/compare/master...develop
