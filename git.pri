@@ -44,41 +44,26 @@ isEmpty(QSCM_BRANCH) {
     isEqual(QSCM_BRANCH, "HEAD") {
         qscm_debug: log("QSCM: Detached head state" $$escape_expand(\n))
 
-        QSCM_REFS=$$system(git -C $$_PRO_FILE_PWD_ show -s --pretty=%d HEAD)
+        QSCM_BRANCHES=$$system(git -C $$_PRO_FILE_PWD_ branch -a --format=$$system_quote("%(refname:short)") --contains HEAD, lines)
+
+        # Remove (HEAD detached ...) line, if any
+        QSCM_BRANCHES -= $$find(QSCM_BRANCHES, ^$$re_escape("(HEAD"))
         QSCM_ORIGIN=$$system(git -C $$_PRO_FILE_PWD_ remote)
 
-        qscm_debug: log("QSCM_REFS:" $$QSCM_REFS $$escape_expand(\n))
+        qscm_debug: log("QSCM_BRANCHES:" $$QSCM_BRANCHES $$escape_expand(\n))
         qscm_debug: log("QSCM_ORIGIN:" $$QSCM_ORIGIN $$escape_expand(\n))
 
-        # strip start and end parentheses
-        QSCM_REFS=$$str_member($$QSCM_REFS, 1, -2)
+        for(QSCM_BRANCH, QSCM_BRANCHES) {
+            # strip remotes
+            QSCM_BRANCH_PARTS=$$split(QSCM_BRANCH,"/")
+            QSCM_BRANCH_PARTS-=$$QSCM_ORIGIN
+            QSCM_BRANCH=$$join(QSCM_BRANCH_PARTS,/)
 
-        # make a list of separate refs
-        QSCM_COMMA=,
-        QSCM_REFS=$$split(QSCM_REFS, $$QSCM_COMMA)
-        qscm_debug: log("QSCM_REFS (list):" $$QSCM_REFS $$escape_expand(\n))
-
-        for(QSCM_REF, QSCM_REFS) {
-            QSCM_REF=$$replace(QSCM_REF," ",)
-            QSCM_REF4=$$str_member($$QSCM_REF, 0, 3)
-
-            # skip tags
-            !isEqual(QSCM_REF4, "tag:") {
-                # strip remotes
-                QSCM_REF_PARTS=$$split(QSCM_REF,"/")
-                QSCM_REF_PARTS-=$$QSCM_ORIGIN
-                QSCM_REF=$$join(QSCM_REF_PARTS,/)
-
-                # skip head
-                !isEqual(QSCM_REF, "HEAD") {
-                    QSCM_SELECTED_REFS += $$QSCM_REF
-                }
-            }
+            QSCM_BRANCH_NAMES += $$QSCM_BRANCH
         }
         # if failed or contains master treat as master
-        isEmpty(QSCM_SELECTED_REFS) | contains(QSCM_SELECTED_REFS, master): QSCM_BRANCH=master
-        else: QSCM_BRANCH=$$first(QSCM_SELECTED_REFS)
-        QSCM_BRANCH=$$replace(QSCM_BRANCH,"\\)",)
+        isEmpty(QSCM_BRANCH_NAMES) | contains(QSCM_BRANCH_NAMES, master): QSCM_BRANCH=master
+        else: QSCM_BRANCH=$$first(QSCM_BRANCH_NAMES)
     }
     # has at least 1 tag
     !isEmpty(QSCM_DESCRIBE) {
