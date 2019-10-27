@@ -18,6 +18,8 @@ Unreleased changes will be added to this section.
   is`version.txt`).
 * Fixed handling of version strings containing build metadata without 
   pre-release version (they had `-` prefix instead of `+`).
+* Fixed handling of non-branch references. Now only branches are considered
+  when getting branch name.
 
 ### Changed
 * QMake SCM now calls `qmake` with every build to always have accurate version 
