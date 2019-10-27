@@ -16,4 +16,4 @@ tests:
 
   artifacts:
     reports:
-      junit: junit.xml
+      junit: qmake-scm-tests/junit.xml
