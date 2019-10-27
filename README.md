@@ -185,6 +185,13 @@ QMake SCM defines several variables that can be defined before including the `.p
   Added in version `1.2`.
 
 
+## Testing
+
+Tests for this project are maintained in a separate repository [QMake SCM Tests](https://gitlab.com/dm0/qmake-scm-tests).
+
+A separate repository allows to keep code of this repository clean.
+
+
 ## Known issues
 
 1. Some versions of Qt on windows platform have a bug resulting in `sed` 
