@@ -187,10 +187,18 @@ QMake SCM defines several variables that can be defined before including the `.p
 
 ## Known issues
 
-1. Some versions of Qt on windows platform have a bug resulting in `sed` (invoked via qmake) running forever on files containing windows line endings.
+1. Some versions of Qt on windows platform have a bug resulting in `sed` 
+   (invoked via qmake) running forever on files containing windows line 
+   endings.
 
    The solution is to save file with unix line endings and turn of crlf conversion via git attributes (`.gitattributes`):
 
    ```
    **/version.in -crlf
    ```
+
+2. Some VCS hostings (at least GitLab) fetch not all references in their CI
+   builds. This results in branch information is not available and branch
+   name reported as master.
+
+   A workaround is to run `git fetch` before building project.
