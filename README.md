@@ -8,9 +8,10 @@ Tags should follow [Semantic Versioning](https://semver.org/) with optional [pre
 
 1. Copy `version.in` and `git.pri` to your project.  
    _(Alternatively include this project as a submodule)_
-2. Add `QSCM_HEADERS += $$PWD/version.in` line to your project `.pro`-file.
-3. Include `version.h` and use defines (the file is created on first build).
-4. Use tags in the form `v1.2.3` in your project.
+2. Include `git.pri` in your project `.pro`-file: `include(path/to/git.pri)`
+3. Add `QSCM_HEADERS += $$PWD/version.in` line to your project `.pro`-file.
+4. Include `version.h` and use defines (the file is created on the first build).
+5. Use tags in the form `v1.2.3` in your project.
 
 See next sections to find out how to create your own templates using [substitutions](#markdown-header-substitutions), change [version prefix](#configuring-qmake-scm)) and support exported (archived) repositories.
 
