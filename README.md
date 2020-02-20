@@ -156,28 +156,28 @@ Version header file generated using template substitution. Following pattern are
 QMake SCM defines several variables that can be defined before including the `.pri` file to alter behavior.
 
 * `QSCM_VERSION_PREFIX`  
-  Tag version prefix that should be stripped from the tag name before further processing. Also influences names of the tags `qmake-scm` will consider. Calls `git describe` with `--match="<QSCM_VERSION_PREFIX>*"` argument.
+    Tag version prefix that should be stripped from the tag name before further processing. Also influences names of the tags `qmake-scm` will consider. Calls `git describe` with `--match="<QSCM_VERSION_PREFIX>*"` argument.
 
-  Default value is `v`.
+    Default value is `v`.
 
-  Can be used to build multiple projects in one repository each with own version.
+    Can be used to build multiple projects in one repository each with own version.
 
 * `qscm_debug` (`CONFIG` option)  
-  Enable debug output from `qmake-scm`.
+    Enable debug output from `qmake-scm`.
 
-  Use `CONFIG+=qscm_debug` when calling `qmake` or in project file.
+    Use `CONFIG+=qscm_debug` when calling `qmake` or in project file.
 
 * `qscm_no_version_setup` (`CONFIG` option)  
-  Turn off setup of standard `qmake` variables related to version.
+    Turn off setup of standard `qmake` variables related to version.
 
-  Default is to setup the following variables:
+    Default is to setup the following variables:
 
-  ```qmake
-  VERSION = $$QSCM_SEMVER
-  VER_MAJ = $$QSCM_SEMVER_MAJ
-  VER_MIN = $$QSCM_SEMVER_MIN
-  VER_PAT = $$QSCM_SEMVER_PAT
-  ```
+  
+        VERSION = $$QSCM_SEMVER
+        VER_MAJ = $$QSCM_SEMVER_MAJ
+        VER_MIN = $$QSCM_SEMVER_MIN
+        VER_PAT = $$QSCM_SEMVER_PAT
+  
 
 * `qscm_no_force_qmake` (`CONFIG` option)  
   Starting from version 1.2 QMake SCM calls `qmake` to update version 
@@ -196,17 +196,15 @@ A separate repository allows to keep code of this repository clean.
 ## Known issues
 
 1. Some versions of Qt on windows platform have a bug resulting in `sed` 
-   (invoked via qmake) running forever on files containing windows line 
-   endings.
+    (invoked via qmake) running forever on files containing windows line 
+    endings.
 
-   The solution is to save file with unix line endings and turn of crlf conversion via git attributes (`.gitattributes`):
+    The solution is to save file with unix line endings and turn of crlf conversion via git attributes (`.gitattributes`):
 
-   ```
-   **/version.in -crlf
-   ```
+        **/version.in -crlf
 
 2. Some VCS hostings (at least GitLab) fetch not all references in their CI
-   builds. This results in branch information is not available and branch
-   name reported as master.
+    builds. This results in branch information is not available and branch
+    name reported as master.
 
-   A workaround is to run `git fetch` before building project.
+    A workaround is to run `git fetch` before building your project.
