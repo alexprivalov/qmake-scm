@@ -33,6 +33,7 @@ pages:
     site_name: QMake SCM
     repo_url: https://gitlab.com/dm0/qmake-scm
     edit_uri: ''
+    google_analytics: ['UA-158838730-1', 'dm0.gitlab.io']
     theme:
       name: cinder
       highlightjs: true
