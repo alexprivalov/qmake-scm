@@ -17,3 +17,41 @@ tests:
   artifacts:
     reports:
       junit: qmake-scm-tests/junit.xml
+
+pages:
+  image: python:3.8-alpine
+  stage: publish
+  before_script:
+    - pip install mkdocs mkdocs-cinder
+  script:
+  - mkdir docs
+  - cd docs
+  - ln -s ../*.md .
+  - cd ..
+  - |
+    echo "
+    site_name: QMake SCM
+    repo_url: https://gitlab.com/dm0/qmake-scm
+    edit_uri: ''
+    google_analytics: ['UA-158838730-1', 'dm0.gitlab.io']
+    theme:
+      name: cinder
+      highlightjs: true
+      colorscheme: xcode
+      hljs_languages:
+        - bash
+        - shell
+        - cpp
+
+    nav:
+      - Home: README.md
+      - Changelog: CHANGELOG.md
+    " > mkdocs.yml
+
+  - mkdocs build
+  - mv site public
+  artifacts:
+    paths:
+    - public
+  only:
+  - tags

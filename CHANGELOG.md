@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Unreleased changes will be added to this section.
 
 
+## 2020-02-20 [v1.2.1]
+
+### Fixed
+* Fixed missing usage step in documentation (`include(.../git.pri)`).
+
+[v1.2.1]: https://gitlab.com/dm0/qmake-scm/compare/v1.2.0...v1.2.1
+
+
 ## 2019-10-27 [v1.2.0]
 
 ### Added
@@ -38,7 +46,7 @@ Unreleased changes will be added to this section.
 
 ## 2019-07-30 [v1.1.1]
 
-## Fixed
+### Fixed
 * `QSCM_SEMVER` to not end with `-` if `QSCM_SEMVER_SUFFIX` is empty
 
 [v1.1.1]: https://gitlab.com/dm0/qmake-scm/compare/v1.1.0...v1.1.1
