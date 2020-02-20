@@ -20,6 +20,7 @@ tests:
 
 pages:
   image: python:3.8-alpine
+  stage: publish
   before_script:
     - pip install mkdocs mkdocs-cinder
   script:
