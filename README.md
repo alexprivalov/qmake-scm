@@ -81,7 +81,7 @@ Version header file generated using template substitution. Following pattern are
 
 * `@{QSCM_SEMVER}`  
   Version string that follows semantic versioning.  
-  `@{QSCM_SEMVER}` = `@{QSCM_SEMVER}` + `-` + `@{QSCM_SEMVER_PREREL}` + `+` + 
+  `@{QSCM_SEMVER}` = `@{QSCM_SEMVER_SIMPLE}` + `-` + `@{QSCM_SEMVER_PREREL}` + `+` + 
   `@{QSCM_SEMVER_BUILD}` (`+` is concatenation, pre-release and build metadata 
   parts are only added if they are not empty).
 
