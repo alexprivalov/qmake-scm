@@ -19,7 +19,7 @@ tests:
       junit: qmake-scm-tests/junit.xml
 
 pages:
-  image: python:3.8-alpine
+  image: python:3.8-slim
   stage: publish
   before_script:
     - pip install mkdocs mkdocs-cinder
