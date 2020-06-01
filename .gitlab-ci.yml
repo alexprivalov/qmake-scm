@@ -1,5 +1,6 @@
 stages:
   - test
+  - docs
   - publish
 
 tests:
@@ -18,9 +19,10 @@ tests:
     reports:
       junit: qmake-scm-tests/junit.xml
 
-pages:
+
+build-docs:
   image: python:3.8-slim
-  stage: publish
+  stage: docs
   before_script:
     - pip install mkdocs mkdocs-cinder
   script:
@@ -49,6 +51,18 @@ pages:
     " > mkdocs.yml
 
   - mkdocs build
+  artifacts:
+    paths:
+    - site
+  only:
+  - tags
+  - /^release\//
+  - /^hotfix\//
+
+pages:
+  image: alpine
+  stage: publish
+  script:
   - mv site public
   artifacts:
     paths:
