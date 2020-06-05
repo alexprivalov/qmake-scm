@@ -33,6 +33,8 @@ tests-windows:
     - wget.exe https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt5_5112/qt.qt5.5112.win64_msvc2017_64/5.11.2-0-201809141946qtbase-Windows-Windows_10-MSVC2017-Windows-Windows_10-X86_64.7z
     - 7z x 5.11.2-0-201809141946qtbase-Windows-Windows_10-MSVC2017-Windows-Windows_10-X86_64.7z
     - $env:Path += ";$pwd/5.11.2/msvc2017_64/bin"
+    - echo "[Paths]" > ./5.11.2/msvc2017_64/bin/qt.conf
+    - echo "Prefix = $pwd/5.11.2/msvc2017_64/" > ./5.11.2/msvc2017_64/bin/qt.conf
     - qmake.exe -install sed -e s/Enterprise/OpenSource/g ./5.11.2/msvc2017_64/mkspecs/qconfig.pri > ./5.11.2/msvc2017_64/mkspecs/qconfig.pri
     - qmake.exe -version
     - qmake.exe -query
