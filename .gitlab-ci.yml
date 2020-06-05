@@ -40,8 +40,6 @@ tests-windows:
     - echo "[Paths]`nPrefix = .." | out-file -encoding ASCII ./5.11.2/msvc2017_64/bin/qt.conf
     - qmake.exe -install sed -e s/Enterprise/OpenSource/g ./5.11.2/msvc2017_64/mkspecs/qconfig.pri > ./5.11.2/msvc2017_64/mkspecs/qconfig.pri
     - qmake.exe -version
-    - qmake.exe -query
-    - qmake.exe -project
 
   script:
     - git clone https://gitlab.com/dm0/qmake-scm-tests.git
