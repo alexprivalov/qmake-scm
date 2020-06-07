@@ -40,6 +40,10 @@ tests-windows:
     - echo "[Paths]`nPrefix = .." | out-file -encoding ASCII ./5.11.2/msvc2017_64/bin/qt.conf
     -  (Get-Content ./5.11.2/msvc2017_64/mkspecs/qconfig.pri -raw) -replace 'Enterprise','OpenSource' -replace 'licheck.exe','' | out-file -encoding ASCII ./5.11.2/msvc2017_64/mkspecs/qconfig.pri
     - qmake.exe -version
+    # Install Pscx module to import batch file, allow its execution via policy and setup env
+    - Set-ExecutionPolicy Bypass -Scope Process -Force
+    - Install-Module Pscx -Scope AllUsers -force -allowclobber
+    - Invoke-BatchFile "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" amd64
 
   script:
     - git clone https://gitlab.com/dm0/qmake-scm-tests.git
