@@ -34,11 +34,11 @@ tests-windows:
     - Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
     - refreshenv
     - python -m pip install tox
-    - wget.exe https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt5_5112/qt.qt5.5112.win64_msvc2017_64/5.11.2-0-201809141946qtbase-Windows-Windows_10-MSVC2017-Windows-Windows_10-X86_64.7z
-    - 7z x 5.11.2-0-201809141946qtbase-Windows-Windows_10-MSVC2017-Windows-Windows_10-X86_64.7z
-    - $env:Path += ";$pwd/5.11.2/msvc2017_64/bin"
-    - echo "[Paths]`nPrefix = .." | out-file -encoding ASCII ./5.11.2/msvc2017_64/bin/qt.conf
-    -  (Get-Content ./5.11.2/msvc2017_64/mkspecs/qconfig.pri -raw) -replace 'Enterprise','OpenSource' -replace 'licheck.exe','' | out-file -encoding ASCII ./5.11.2/msvc2017_64/mkspecs/qconfig.pri
+    - wget.exe https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt5_5142/qt.qt5.5142.win64_msvc2017_64/5.14.2-0-202003291224qtbase-Windows-Windows_10-MSVC2017-Windows-Windows_10-X86_64.7z
+    - 7z x 5.14.2-0-202003291224qtbase-Windows-Windows_10-MSVC2017-Windows-Windows_10-X86_64.7z
+    - $env:Path += ";$pwd/5.14.2/msvc2017_64/bin"
+    - echo "[Paths]`nPrefix = .." | out-file -encoding ASCII ./5.14.2/msvc2017_64/bin/qt.conf
+    -  (Get-Content ./5.14.2/msvc2017_64/mkspecs/qconfig.pri -raw) -replace 'Enterprise','OpenSource' -replace 'licheck.exe','' | out-file -encoding ASCII ./5.14.2/msvc2017_64/mkspecs/qconfig.pri
     - qmake.exe -version
     # Install Pscx module to import batch file, allow its execution via policy and setup env
     - Set-ExecutionPolicy Bypass -Scope Process -Force
