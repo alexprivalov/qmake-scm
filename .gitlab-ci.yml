@@ -34,6 +34,7 @@ tests-windows:
     - $env:ChocolateyInstall = Convert-Path "$((Get-Command choco).Path)\..\.."
     - Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
     - refreshenv
+    - $env:Path = "C:\Program Files\Git\cmd\;$env:Path;"
     - python -m pip install tox
     - wget.exe https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt5_5142/qt.qt5.5142.win64_msvc2017_64/5.14.2-0-202003291224qtbase-Windows-Windows_10-MSVC2017-Windows-Windows_10-X86_64.7z
     - 7z x 5.14.2-0-202003291224qtbase-Windows-Windows_10-MSVC2017-Windows-Windows_10-X86_64.7z
