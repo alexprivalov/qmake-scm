@@ -28,6 +28,7 @@ tests-windows:
 
   before_script:
     - choco install -y python3
+    - choco install -y git
     # Make the next refreshenv command work. Looks like we're running in the
     # fresh choco install (the same session) so this workaround is required,
     - $env:ChocolateyInstall = Convert-Path "$((Get-Command choco).Path)\..\.."
