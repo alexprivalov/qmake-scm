@@ -44,6 +44,7 @@ tests-windows:
     - Set-ExecutionPolicy Bypass -Scope Process -Force
     - Install-Module Pscx -Scope AllUsers -force -allowclobber
     - Invoke-BatchFile "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" amd64
+    - git --version
 
   script:
     - git clone https://gitlab.com/dm0/qmake-scm-tests.git
