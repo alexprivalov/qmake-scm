@@ -161,13 +161,23 @@ QSCM_SUBSTITUTIONS = \
     s|@{QSCM_DISTANCE}|$${QSCM_DISTANCE}|g\
     s|@{QSCM_PRETTY_VERSION}|$$join(QSCM_PRETTY_VERSION, " ")|g\
 
-QSCM_SUBSTITUTIONS_FILE = "$$OUT_PWD/qscmsubst.sed"
-write_file($$QSCM_SUBSTITUTIONS_FILE, QSCM_SUBSTITUTIONS)
-
 qscm.name = Generate version headers
 qscm.input = QSCM_HEADERS
 qscm.commands += $${QMAKE_STREAM_EDITOR}
-qscm.commands += -f $$shell_quote($$QSCM_SUBSTITUTIONS_FILE)
+
+# Generate sed script file on unix or fallback to command line generation on win32
+unix {
+    QSCM_SUBSTITUTIONS_FILE = "$$OUT_PWD/qscmsubst.sed"
+    write_file($$QSCM_SUBSTITUTIONS_FILE, QSCM_SUBSTITUTIONS)
+    qscm.commands += -f $$shell_quote($$QSCM_SUBSTITUTIONS_FILE)
+}
+win32 {
+    for(QSCM_SUBST, QSCM_SUBSTITUTIONS) {
+        qscm.commands += -e $$shell_quote($$QSCM_SUBST)
+    }
+}
+
+# Conditionally update file on unix and always on win32
 unix {
     qscm.commands += ${QMAKE_FILE_IN} > ${QMAKE_FILE_OUT}.tmp;
     qscm.commands += if cmp ${QMAKE_FILE_OUT}.tmp ${QMAKE_FILE_OUT} >/dev/null 2>&1; then rm ${QMAKE_FILE_OUT}.tmp; else mv ${QMAKE_FILE_OUT}.tmp ${QMAKE_FILE_OUT}; fi
