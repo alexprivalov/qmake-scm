@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 Unreleased changes will be added to this section.
 
+### Fixed
+* Fixed windows compatibility issues. 
+
 
 ## 2020-05-29 [v1.2.2]
 
