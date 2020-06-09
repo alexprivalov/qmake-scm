@@ -28,7 +28,7 @@ tests-linux:
     reports:
       junit: qmake-scm-tests/junit.xml
     paths:
-      - qmake-scm-tests/tests.svg
+      - tests.svg
 
 
 tests-windows:
@@ -78,7 +78,7 @@ tests-windows:
     reports:
       junit: qmake-scm-tests/junit.xml
     paths:
-      - qmake-scm-tests/tests.svg
+      - tests.svg
 
 
 build-docs:
