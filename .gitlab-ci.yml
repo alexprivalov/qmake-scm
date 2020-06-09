@@ -7,17 +7,29 @@ tests-linux:
   image: "${CI_REGISTRY}/dm0/qmake-scm-tests/qscm-testenv:v1.0.1"
   stage: test
 
-  script:
-  - git clone https://gitlab.com/dm0/qmake-scm-tests.git
-  - cd qmake-scm-tests
-  - tox -- --qscm-path ..
+  before_script:
+    - apk --no-cache add jq
+    - pip install yq anybadge
 
-  except:
-    - tags
+  script:
+    - git clone https://gitlab.com/dm0/qmake-scm-tests.git
+    - cd qmake-scm-tests
+    - tox -- --qscm-path ..
+
+  after_script:
+    - failures=$(xq '.testsuites.testsuite["@failures"] | tonumber' qmake-scm-tests/junit.xml)
+    - tests=$(xq '.testsuites.testsuite["@tests"] | tonumber' qmake-scm-tests/junit.xml)
+    - passed=$(($tests - $failures))
+    - if [ "$passed" -eq "$tests" ]; then color="green"; else color="maroon"; fi
+    - 'anybadge -l "Linux Tests" -v "✓ $passed | ✗ $failures " -f tests.svg --color "$color"'
 
   artifacts:
+    when: always
     reports:
       junit: qmake-scm-tests/junit.xml
+    paths:
+      - qmake-scm-tests/tests.svg
+
 
 tests-windows:
   tags:
@@ -34,7 +46,7 @@ tests-windows:
     - $env:ChocolateyInstall = Convert-Path "$((Get-Command choco).Path)\..\.."
     - Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
     - refreshenv
-    - python -m pip install tox
+    - python -m pip install tox anybadge jq yq
     - wget.exe https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt5_5142/qt.qt5.5142.win64_msvc2017_64/5.14.2-0-202003291224qtbase-Windows-Windows_10-MSVC2017-Windows-Windows_10-X86_64.7z
     - 7z x 5.14.2-0-202003291224qtbase-Windows-Windows_10-MSVC2017-Windows-Windows_10-X86_64.7z
     - $env:Path += ";$pwd/5.14.2/msvc2017_64/bin"
@@ -53,12 +65,20 @@ tests-windows:
     - cd qmake-scm-tests
     - tox -- --qscm-path ..
 
-  except:
-    - tags
+  after_script:
+    - $failures = (xq '.testsuites.testsuite[\"@failures\"] | tonumber' qmake-scm-tests/junit.xml)
+    - $tests = (xq '.testsuites.testsuite[\"@tests\"] | tonumber' qmake-scm-tests/junit.xml)
+    - $skipped = (xq '.testsuites.testsuite[\"@skipped\"] | tonumber' qmake-scm-tests/junit.xml)
+    - $passed = [int]$tests - [int]$failures
+    - if ($passed -eq $tests) { $color="green" } else { $color="maroon" }
+    - 'anybadge -l "Windows Tests" -v "✓ $passed | ✗ $failures " -f tests.svg --color "$color"'
 
   artifacts:
+    when: always
     reports:
       junit: qmake-scm-tests/junit.xml
+    paths:
+      - qmake-scm-tests/tests.svg
 
 
 build-docs:
