@@ -8,8 +8,8 @@ tests-linux:
   stage: test
 
   before_script:
-    - apk --no-cache add jq
-    - pip install yq anybadge
+    - apk --no-cache add jq py3-pip
+    - pip3 install yq anybadge
 
   script:
     - git clone https://gitlab.com/dm0/qmake-scm-tests.git
