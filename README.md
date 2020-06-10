@@ -197,7 +197,7 @@ A separate repository allows to keep code of this repository clean.
 
 1. Some versions of Qt on windows platform have a bug resulting in `sed` 
     (invoked via qmake) running forever on files containing windows line 
-    endings.
+    endings (see https://bugreports.qt.io/browse/QTBUG-80443).
 
     The solution is to save file with unix line endings and turn of crlf conversion via git attributes (`.gitattributes`):
 

@@ -1,26 +1,94 @@
 stages:
   - test
+  - docs
   - publish
 
-tests:
+tests-linux:
   image: "${CI_REGISTRY}/dm0/qmake-scm-tests/qscm-testenv:v1.0.1"
   stage: test
 
+  before_script:
+    - apk --no-cache add jq py3-pip
+    - pip3 install yq anybadge
+
   script:
-  - git clone https://gitlab.com/dm0/qmake-scm-tests.git
-  - cd qmake-scm-tests
-  - tox -- --qscm-path ..
+    - git clone https://gitlab.com/dm0/qmake-scm-tests.git
+    - cd qmake-scm-tests
+    - tox -- --qscm-path ..
+
+  after_script:
+    - failures=$(xq '.testsuites.testsuite["@failures"] | tonumber' qmake-scm-tests/junit.xml)
+    - tests=$(xq '.testsuites.testsuite["@tests"] | tonumber' qmake-scm-tests/junit.xml)
+    - passed=$(($tests - $failures))
+    - if [ "$passed" -eq "$tests" ]; then color="green"; else color="maroon"; fi
+    - 'anybadge -l "Linux Tests" -v "$passed / $tests passed" -f tests.svg --color "$color"'
 
   except:
     - tags
 
   artifacts:
+    when: always
     reports:
       junit: qmake-scm-tests/junit.xml
+    paths:
+      - tests.svg
 
-pages:
-  image: python:3.8-alpine
-  stage: publish
+
+tests-windows:
+  tags:
+    - shared-windows
+    - windows
+    - windows-1809
+  stage: test
+
+  before_script:
+    - choco install -y python3 git jq
+    # Make the next refreshenv command work. Looks like we're running in the
+    # fresh choco install (the same session) so this workaround is required,
+    - $env:ChocolateyInstall = Convert-Path "$((Get-Command choco).Path)\..\.."
+    - Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
+    - refreshenv
+    - python -m pip install tox yq anybadge
+    - wget.exe https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt5_5142/qt.qt5.5142.win64_msvc2017_64/5.14.2-0-202003291224qtbase-Windows-Windows_10-MSVC2017-Windows-Windows_10-X86_64.7z
+    - 7z x 5.14.2-0-202003291224qtbase-Windows-Windows_10-MSVC2017-Windows-Windows_10-X86_64.7z
+    - $env:Path += ";$pwd/5.14.2/msvc2017_64/bin"
+    - echo "[Paths]`nPrefix = .." | out-file -encoding ASCII ./5.14.2/msvc2017_64/bin/qt.conf
+    -  (Get-Content ./5.14.2/msvc2017_64/mkspecs/qconfig.pri -raw) -replace 'Enterprise','OpenSource' -replace 'licheck.exe','' | out-file -encoding ASCII ./5.14.2/msvc2017_64/mkspecs/qconfig.pri
+    - qmake.exe -version
+    # Install Pscx module to import batch file, allow its execution via policy and setup env
+    - Set-ExecutionPolicy Bypass -Scope Process -Force
+    - Install-Module Pscx -Scope AllUsers -force -allowclobber
+    - Invoke-BatchFile "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" amd64
+    - $env:Path = "C:/Program Files/Git/cmd;$env:Path;"
+    - git --version
+
+  script:
+    - git clone https://gitlab.com/dm0/qmake-scm-tests.git
+    - cd qmake-scm-tests
+    - tox -- --qscm-path ..
+
+  after_script:
+    - $failures = (xq '.testsuites.testsuite[\"@failures\"] | tonumber' qmake-scm-tests/junit.xml)
+    - $tests = (xq '.testsuites.testsuite[\"@tests\"] | tonumber' qmake-scm-tests/junit.xml)
+    - $skipped = (xq '.testsuites.testsuite[\"@skipped\"] | tonumber' qmake-scm-tests/junit.xml)
+    - $passed = [int]$tests - [int]$failures
+    - if ($passed -eq $tests) { $color="green" } else { $color="maroon" }
+    - 'anybadge -l "Windows Tests" -v "$passed / $tests passed" -f tests.svg --color "$color"'
+
+  except:
+    - tags
+
+  artifacts:
+    when: always
+    reports:
+      junit: qmake-scm-tests/junit.xml
+    paths:
+      - tests.svg
+
+
+build-docs:
+  image: python:3.8-slim
+  stage: docs
   before_script:
     - pip install mkdocs mkdocs-cinder
   script:
@@ -49,6 +117,18 @@ pages:
     " > mkdocs.yml
 
   - mkdocs build
+  artifacts:
+    paths:
+    - site
+  only:
+  - tags
+  - /^release\//
+  - /^hotfix\//
+
+pages:
+  image: alpine
+  stage: publish
+  script:
   - mv site public
   artifacts:
     paths:
