@@ -21,7 +21,7 @@ tests-linux:
     - tests=$(xq '.testsuites.testsuite["@tests"] | tonumber' qmake-scm-tests/junit.xml)
     - passed=$(($tests - $failures))
     - if [ "$passed" -eq "$tests" ]; then color="green"; else color="maroon"; fi
-    - 'anybadge -l "Linux Tests" -v "✓ $passed | ✗ $failures " -f tests.svg --color "$color"'
+    - 'anybadge -l "Linux Tests" -v "$passed / $tests passed" -f tests.svg --color "$color"'
 
   except:
     - tags
@@ -74,7 +74,7 @@ tests-windows:
     - $skipped = (xq '.testsuites.testsuite[\"@skipped\"] | tonumber' qmake-scm-tests/junit.xml)
     - $passed = [int]$tests - [int]$failures
     - if ($passed -eq $tests) { $color="green" } else { $color="maroon" }
-    - 'anybadge -l "Windows Tests" -v "✓ $passed | ✗ $failures " -f tests.svg --color "$color"'
+    - 'anybadge -l "Windows Tests" -v "$passed / $tests passed" -f tests.svg --color "$color"'
 
   except:
     - tags
