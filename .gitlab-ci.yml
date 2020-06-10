@@ -23,6 +23,9 @@ tests-linux:
     - if [ "$passed" -eq "$tests" ]; then color="green"; else color="maroon"; fi
     - 'anybadge -l "Linux Tests" -v "✓ $passed | ✗ $failures " -f tests.svg --color "$color"'
 
+  except:
+    - tags
+
   artifacts:
     when: always
     reports:
@@ -72,6 +75,9 @@ tests-windows:
     - $passed = [int]$tests - [int]$failures
     - if ($passed -eq $tests) { $color="green" } else { $color="maroon" }
     - 'anybadge -l "Windows Tests" -v "✓ $passed | ✗ $failures " -f tests.svg --color "$color"'
+
+  except:
+    - tags
 
   artifacts:
     when: always
