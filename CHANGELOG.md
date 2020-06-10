@@ -7,8 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 Unreleased changes will be added to this section.
 
+
+## 2020-06-10 [v1.2.3]
+
 ### Fixed
-* Fixed windows compatibility issues. 
+* Fixed windows compatibility issues. Added testing for windows platform.
+
+[v1.2.3]: https://gitlab.com/dm0/qmake-scm/compare/v1.2.2...v1.2.3
 
 
 ## 2020-05-29 [v1.2.2]
