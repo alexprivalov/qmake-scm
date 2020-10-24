@@ -192,15 +192,12 @@ qscm.CONFIG = no_link target_predeps
 
 QMAKE_EXTRA_COMPILERS += qscm
 
-isEqual(MAKEFILE_GENERATOR, "MSBUILD"): QSCM_MAKE_PROGRAM = nmake
-else: QSCM_MAKE_PROGRAM = make
-
 # Force qmake execution if not instructed to skip it.
 # This help to have always up to date version information. The version info
 # is captured during the qmake call.
 !qscm_no_force_qmake {
     qmakeforce.target = dummy
-    qmakeforce.commands = $${QSCM_MAKE_PROGRAM} qmake
+    qmakeforce.commands = $(MAKE) qmake
     qmakeforce.depends = FORCE
     PRE_TARGETDEPS += $$qmakeforce.target
     QMAKE_EXTRA_TARGETS += qmakeforce

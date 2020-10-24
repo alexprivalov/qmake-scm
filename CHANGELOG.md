@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Unreleased changes will be added to this section.
 
 
+## 2020-10-24 [v1.2.4]
+### Fixed
+* Fixed warning about unavailable job server on unix platforms.
+
+[v1.2.4]: https://gitlab.com/dm0/qmake-scm/compare/v1.2.3...v1.2.4
+
+
 ## 2020-06-10 [v1.2.3]
 
 ### Fixed
