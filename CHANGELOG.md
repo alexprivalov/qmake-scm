@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 Unreleased changes will be added to this section.
 
+### Fixed
+* Fixed warning about unavailable job server on unix platforms.
+
 
 ## 2020-06-10 [v1.2.3]
 
