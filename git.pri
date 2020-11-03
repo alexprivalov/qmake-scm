@@ -1,9 +1,18 @@
 isEmpty(QSCM_VERSION_PREFIX):QSCM_VERSION_PREFIX=v
 
-QSCM_DESCRIBE=$$system(git -C $$_PRO_FILE_PWD_ describe --long --tags --match="$$QSCM_VERSION_PREFIX*")
-# sample data: v0.4.0-5-ga8152a7
 # Check git exists
 !system(git -C $$_PRO_FILE_PWD_ status): warning("Command 'git status' returned error. Is git installed?")
+
+# sample output: v0.4.0-5-ga8152a7
+QSCM_DESCRIBE=$$system(git -C $$_PRO_FILE_PWD_ describe --long --tags --match="$$QSCM_VERSION_PREFIX*" 2>&1, true, QSCM_GIT_STATUS)
+
+# If git failed then it either doesn't exist or failed to find a tag. Fallback to zero version.
+!equals(QSCM_GIT_STATUS, "0") {
+    qscm_debug: log("QSCM: git describe failed: " $$QSCM_DESCRIBE $$escape_expand(\n))
+    QSCM_DESCRIBE=
+}
+
+
 QSCM_BRANCH=$$system(git -C $$_PRO_FILE_PWD_ rev-parse --abbrev-ref HEAD)
 QSCM_REPO_STATUS=$$system(git -C $$_PRO_FILE_PWD_ status -s)
 
