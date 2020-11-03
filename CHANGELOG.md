@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 Unreleased changes will be added to this section.
 
+### Fixed
+* Fixed fatal messages printed to stderr in case git can't find a tag.
+
+### Added
+* Added warning in case git is not installed (judged by `git status` command).
+
 
 ## 2020-10-24 [v1.2.4]
 ### Fixed
