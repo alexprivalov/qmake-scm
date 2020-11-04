@@ -12,6 +12,8 @@ Unreleased changes will be added to this section.
 
 ### Added
 * Added warning in case git is not installed (judged by `git status` command).
+* Added support for custom git executable via `QSCM_GIT` variable.
+* Added warning when `git status` returns error.
 
 
 ## 2020-10-24 [v1.2.4]
