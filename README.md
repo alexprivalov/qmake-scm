@@ -162,6 +162,9 @@ QMake SCM defines several variables that can be defined before including the `.p
 
     Can be used to build multiple projects in one repository each with own version.
 
+* `QSCM_GIT`  
+    Allows to use custom git. Default value is `git`.
+
 * `qscm_debug` (`CONFIG` option)  
     Enable debug output from `qmake-scm`.
 
