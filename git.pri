@@ -1,10 +1,11 @@
 isEmpty(QSCM_VERSION_PREFIX):QSCM_VERSION_PREFIX=v
+isEmpty(QSCM_GIT): QSCM_GIT=git
 
 # Check git exists
-!system(git -C $$_PRO_FILE_PWD_ status): warning("Command 'git status' returned error. Is git installed?")
+!system($$QSCM_GIT -C $$_PRO_FILE_PWD_ status): warning("Command 'git status' returned error. Is git installed?")
 
 # sample output: v0.4.0-5-ga8152a7
-QSCM_DESCRIBE=$$system(git -C $$_PRO_FILE_PWD_ describe --long --tags --match="$$QSCM_VERSION_PREFIX*" 2>&1, true, QSCM_GIT_STATUS)
+QSCM_DESCRIBE=$$system($$QSCM_GIT -C $$_PRO_FILE_PWD_ describe --long --tags --match="$$QSCM_VERSION_PREFIX*" 2>&1, true, QSCM_GIT_STATUS)
 
 # If git failed then it either doesn't exist or failed to find a tag. Fallback to zero version.
 !equals(QSCM_GIT_STATUS, "0") {
@@ -13,8 +14,8 @@ QSCM_DESCRIBE=$$system(git -C $$_PRO_FILE_PWD_ describe --long --tags --match="$
 }
 
 
-QSCM_BRANCH=$$system(git -C $$_PRO_FILE_PWD_ rev-parse --abbrev-ref HEAD)
-QSCM_REPO_STATUS=$$system(git -C $$_PRO_FILE_PWD_ status -s)
+QSCM_BRANCH=$$system($$QSCM_GIT -C $$_PRO_FILE_PWD_ rev-parse --abbrev-ref HEAD)
+QSCM_REPO_STATUS=$$system($$QSCM_GIT -C $$_PRO_FILE_PWD_ status -s)
 
 qscm_debug: log("QSCM_GIT_DESCRIBE:" $$QSCM_DESCRIBE $$escape_expand(\n))
 qscm_debug: log("QSCM_GIT_BRANCH:" $$QSCM_BRANCH $$escape_expand(\n))
@@ -55,11 +56,11 @@ isEmpty(QSCM_BRANCH) {
     isEqual(QSCM_BRANCH, "HEAD") {
         qscm_debug: log("QSCM: Detached head state" $$escape_expand(\n))
 
-        QSCM_BRANCHES=$$system(git -C $$_PRO_FILE_PWD_ branch -a --format=$$system_quote("%(refname:short)") --contains HEAD, lines)
+        QSCM_BRANCHES=$$system($$QSCM_GIT -C $$_PRO_FILE_PWD_ branch -a --format=$$system_quote("%(refname:short)") --contains HEAD, lines)
 
         # Remove (HEAD detached ...) line, if any
         QSCM_BRANCHES -= $$find(QSCM_BRANCHES, ^$$re_escape("(HEAD"))
-        QSCM_ORIGIN=$$system(git -C $$_PRO_FILE_PWD_ remote)
+        QSCM_ORIGIN=$$system($$QSCM_GIT -C $$_PRO_FILE_PWD_ remote)
 
         qscm_debug: log("QSCM_BRANCHES:" $$QSCM_BRANCHES $$escape_expand(\n))
         qscm_debug: log("QSCM_ORIGIN:" $$QSCM_ORIGIN $$escape_expand(\n))
@@ -89,9 +90,9 @@ isEmpty(QSCM_BRANCH) {
         QSCM_HASH=$$section(QSCM_HASH,,2)
     }else {
         qscm_debug: log("QSCM: No tags found" $$escape_expand(\n))
-        QSCM_DISTANCE=$$system(git -C $$_PRO_FILE_PWD_ rev-list --count HEAD)
+        QSCM_DISTANCE=$$system($$QSCM_GIT -C $$_PRO_FILE_PWD_ rev-list --count HEAD)
         QSCM_VERSION=0.0.0
-        QSCM_HASH=$$system(git -C $$_PRO_FILE_PWD_ rev-parse --short HEAD)
+        QSCM_HASH=$$system($$QSCM_GIT -C $$_PRO_FILE_PWD_ rev-parse --short HEAD)
     }
     !isEmpty(QSCM_REPO_STATUS): QSCM_HASH=$${QSCM_HASH}+
 }
