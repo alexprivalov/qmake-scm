@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 Unreleased changes will be added to this section.
 
+
+## 2020-11-04 [v1.3.0]
 ### Fixed
 * Fixed fatal messages printed to stderr in case git can't find a tag.
 
@@ -14,6 +16,8 @@ Unreleased changes will be added to this section.
 * Added warning in case git is not installed (judged by `git status` command).
 * Added support for custom git executable via `QSCM_GIT` variable.
 * Added warning when `git status` returns error.
+
+[v1.3.0]: https://gitlab.com/dm0/qmake-scm/compare/v1.2.4...v1.3.0
 
 
 ## 2020-10-24 [v1.2.4]
