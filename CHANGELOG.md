@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 Unreleased changes will be added to this section.
 
+## 2026-01-06 [v1.3.1]
+### Fixed
+* Fixed handling of spaces in project paths for git commands.
 
 ## 2020-11-04 [v1.3.0]
 ### Fixed
