@@ -1,3 +1,5 @@
+# Fork of https://gitlab.com/dm0/qmake-scm
+
 # Version support for QMake projects
 
 This project adds ability to automatically get version information from SCM (currently git only) and use it in QMake projects.

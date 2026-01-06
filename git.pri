@@ -2,10 +2,10 @@ isEmpty(QSCM_VERSION_PREFIX):QSCM_VERSION_PREFIX=v
 isEmpty(QSCM_GIT): QSCM_GIT=git
 
 # Check git exists
-!system($$QSCM_GIT -C $$_PRO_FILE_PWD_ status): warning("Command 'git status' returned error.")
+!system($$QSCM_GIT -C \"$$_PRO_FILE_PWD_\" status): warning("Command 'git status' returned error.")
 
 # sample output: v0.4.0-5-ga8152a7
-QSCM_DESCRIBE=$$system($$QSCM_GIT -C $$_PRO_FILE_PWD_ describe --long --tags --match="$$QSCM_VERSION_PREFIX*" 2>&1, true, QSCM_GIT_STATUS)
+QSCM_DESCRIBE=$$system($$QSCM_GIT -C \"$$_PRO_FILE_PWD_\" describe --long --tags --match=\"$$QSCM_VERSION_PREFIX*\" 2>&1, true, QSCM_GIT_STATUS)
 
 # If git failed then it either doesn't exist or failed to find a tag. Fallback to zero version.
 !equals(QSCM_GIT_STATUS, "0") {
@@ -14,8 +14,8 @@ QSCM_DESCRIBE=$$system($$QSCM_GIT -C $$_PRO_FILE_PWD_ describe --long --tags --m
 }
 
 
-QSCM_BRANCH=$$system($$QSCM_GIT -C $$_PRO_FILE_PWD_ rev-parse --abbrev-ref HEAD)
-QSCM_REPO_STATUS=$$system($$QSCM_GIT -C $$_PRO_FILE_PWD_ status -s)
+QSCM_BRANCH=$$system($$QSCM_GIT -C \"$$_PRO_FILE_PWD_\" rev-parse --abbrev-ref HEAD)
+QSCM_REPO_STATUS=$$system($$QSCM_GIT -C \"$$_PRO_FILE_PWD_\" status -s)
 
 qscm_debug: log("QSCM_GIT_DESCRIBE:" $$QSCM_DESCRIBE $$escape_expand(\n))
 qscm_debug: log("QSCM_GIT_BRANCH:" $$QSCM_BRANCH $$escape_expand(\n))
